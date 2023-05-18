@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Evdaş Bul</string>
+
+    <string name="prompt_email_address">Email Adresi</string>
+    <string name="prompt_password">Parola</string>
+
+    <string name="button_login">Giriş Yap</string>
+    <string name="button_signup">Kayıt Ol</string>
+    <string name="button_forgot_password">Şifremi Unuttum</string>
+
+    <string name="title_login_page">Giriş Yapın</string>
+</resources>
