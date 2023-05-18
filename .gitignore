@@ -14,3 +14,16 @@
 .cxx
 local.properties
 app/google-services.json
+.idea/codeStyles/codeStyleConfig.xml
+.idea/codeStyles/Project.xml
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/vcs.xml
+app/proguard-rules.pro
+app/src/androidTest/java/com/example/housemateapp/ExampleInstrumentedTest.java
+app/src/test/java/com/example/housemateapp/ExampleUnitTest.java
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+gradlew
+gradlew.bat
