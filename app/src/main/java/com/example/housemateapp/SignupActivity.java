@@ -124,6 +124,7 @@ public class SignupActivity extends AppCompatActivity {
                         .setDisplayName(fullName)
                         .build();
 
+                    assert firebaseUser != null;
                     firebaseUser.updateProfile(profileChangeRequest);
 
                     String uid = firebaseUser.getUid();
