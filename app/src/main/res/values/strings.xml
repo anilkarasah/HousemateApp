@@ -18,4 +18,10 @@
     <string name="description_profile_picture">Profil Fotoğrafı</string>
 
     <string name="title_signup_page">Kayıt Olun</string>
+
+    <string name="permission_camera">Bu işlem için kamera izni gereklidir.</string>
+    <string name="permission_gallery">Bu işlem için galeriye erişim izni gereklidir.</string>
+    <string name="no_app_supporting">Bu işlemi destekleyen hiçbir uygulama bulunamadı.</string>
+
+    <string name="validation_email_not_empty">Email adresi boş olamaz.</string>
 </resources>

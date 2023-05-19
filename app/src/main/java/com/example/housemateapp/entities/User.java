@@ -5,7 +5,21 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
+import com.example.housemateapp.R;
+import com.example.housemateapp.utilities.ValidationException;
+
 public class User {
+    public static final String COLLECTION_NAME = "users";
+    public static final String UID = "uid";
+    public static final String FULL_NAME = "fullName";
+    public static final String EMAIL_ADDRESS = "emailAddress";
+    public static final String PHONE_NUMBER = "phoneNumber";
+    public static final String DEPARTMENT = "department";
+    public static final String GRADE = "grade";
+    public static final String RANGE_IN_KILOMETERS = "rangeInKilometers";
+    public static final String WILL_STAY_FOR_DAYS = "willStayForDays";
+
+    @Nullable
     public String uid;
     public String fullName;
     public String emailAddress;
@@ -18,8 +32,7 @@ public class User {
     @Nullable
     public Bitmap profilePicture;
 
-    private User(String uid, String fullName, String emailAddress, String phoneNumber, String department, int grade, int rangeInKilometers, int willStayForDays) {
-        this.uid = uid;
+    public User(String fullName, String emailAddress, String phoneNumber, String department, int grade, int rangeInKilometers, int willStayForDays) {
         this.fullName = fullName;
         this.emailAddress = emailAddress;
         this.phoneNumber = phoneNumber;
@@ -29,26 +42,17 @@ public class User {
         this.willStayForDays = willStayForDays;
     }
 
-    public static User Create(String uid, String fullName, String emailAddress, String phoneNumber, String department, int grade, int rangeInKilometers, int willStayForDays) {
-        if (!validateEmail(emailAddress)) return null;
-
-        return new User(uid, fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays);
-    }
-
-    public static boolean validateEmail(String emailAddress) {
+    public static void validateEmail(String emailAddress) throws ValidationException {
         // email address cannot be null or empty
         if (TextUtils.isEmpty(emailAddress)) {
-            return false;
+            throw new ValidationException("Email adresi boş olamaz.");
         }
 
         // email address must consist only 2 parts
         String[] domains = emailAddress.split("@");
 
-        if (domains.length != 2) {
-            return false;
+        if (domains.length != 2 || !domains[1].equalsIgnoreCase("std.yildiz.edu.tr")) {
+            throw new ValidationException("Email adresi \"example@std.yildiz.edu.tr\" formatında olmalıdır.");
         }
-
-        // email address' host must be equal to:
-        return domains[1].equalsIgnoreCase("std.yildiz.edu.tr");
     }
 }
