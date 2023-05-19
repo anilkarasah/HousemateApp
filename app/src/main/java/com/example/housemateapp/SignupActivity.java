@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.housemateapp.entities.*;
+import com.example.housemateapp.entities.User;
 import com.example.housemateapp.utilities.CameraUtils;
 import com.example.housemateapp.utilities.ValidationException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -134,18 +134,18 @@ public class SignupActivity extends AppCompatActivity {
                         .set(user)
                         .addOnFailureListener(e -> Log.i("SignupActivity/Firestore", e.getMessage()));
 
-                    firebaseUser.sendEmailVerification()
-                        .addOnSuccessListener(unused -> {
-                            Toast.makeText(this, "Başarıyla kayıt oldunuz!", Toast.LENGTH_SHORT).show();
-                            Intent loginIntent = new Intent(this, LoginActivity.class);
-                            startActivity(loginIntent);
-                        });
-
                     byte[] data = getBitmapData(image_profilePicture);
                     storage.getReference()
                         .child("profiles/" + uid + ".jpg")
                         .putBytes(data)
                         .addOnFailureListener(e -> Log.i("SignupActivity/Storage", e.getMessage()));
+
+                    firebaseUser.sendEmailVerification()
+                        .addOnSuccessListener(unused -> {
+                            Toast.makeText(this, "Doğrulama maili gönderildi!", Toast.LENGTH_SHORT).show();
+                            Intent loginIntent = new Intent(this, LoginActivity.class);
+                            startActivity(loginIntent);
+                        });
                 });
         });
     }

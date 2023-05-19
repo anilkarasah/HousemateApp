@@ -8,12 +8,15 @@
     <string name="prompt_department">Bölüm</string>
     <string name="prompt_grade">Sınıf</string>
     <string name="prompt_have_an_account">Bir hesabınız var mı?</string>
+    <string name="prompt_send_confirmation_email">Doğrulama maili gönderildi.</string>
 
     <string name="button_login">Giriş Yap</string>
     <string name="button_signup">Kayıt Ol</string>
     <string name="button_forgot_password">Şifremi Unuttum</string>
     <string name="button_take_picture">Fotoğraf Çek</string>
     <string name="button_upload_picture">Fotoğraf Yükle</string>
+    <string name="button_send_confirmation">Doğrula</string>
+    <string name="button_go_back">Geri Dön</string>
 
     <string name="description_profile_picture">Profil Fotoğrafı</string>
 
@@ -22,6 +25,4 @@
     <string name="permission_camera">Bu işlem için kamera izni gereklidir.</string>
     <string name="permission_gallery">Bu işlem için galeriye erişim izni gereklidir.</string>
     <string name="no_app_supporting">Bu işlemi destekleyen hiçbir uygulama bulunamadı.</string>
-
-    <string name="validation_email_not_empty">Email adresi boş olamaz.</string>
 </resources>
