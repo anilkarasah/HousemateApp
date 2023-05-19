@@ -57,7 +57,7 @@
 
             <Button
                 android:id="@+id/buttonLogin"
-                android:layout_width="144dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/custom_button"
@@ -76,7 +76,6 @@
 
                 <Button
                     android:id="@+id/buttonRedirectSignup"
-                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

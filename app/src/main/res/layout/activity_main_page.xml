@@ -9,34 +9,10 @@
 
     <include layout="@layout/layout_header" />
 
-    <TextView
-        android:id="@+id/textUid"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mainPageUsersView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/textFullName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/textEmailAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/textDepartment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <ImageView
-        android:id="@+id/imageMainAvatar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:srcCompat="@tools:sample/avatars" />
 
 </LinearLayout>

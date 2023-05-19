@@ -101,11 +101,11 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         button_signup.setOnClickListener(view -> {
-            String fullName = text_fullName.getText().toString();
-            String emailAddress = text_emailAddress.getText().toString();
+            String fullName = text_fullName.getText().toString().trim();
+            String emailAddress = text_emailAddress.getText().toString().trim();
             String password = text_password.getText().toString();
-            String phoneNumber = text_phoneNumber.getText().toString();
-            String department = text_department.getText().toString();
+            String phoneNumber = text_phoneNumber.getText().toString().trim();
+            String department = text_department.getText().toString().trim();
             int grade = Integer.parseInt(text_grade.getText().toString());
 
             User user = new User(
@@ -128,6 +128,7 @@ public class SignupActivity extends AppCompatActivity {
                     firebaseUser.updateProfile(profileChangeRequest);
 
                     String uid = firebaseUser.getUid();
+                    user.uid = uid;
 
                     db.collection(User.COLLECTION_NAME)
                         .document(uid)
