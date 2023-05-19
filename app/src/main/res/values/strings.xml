@@ -1,12 +1,21 @@
 <resources>
     <string name="app_name">Evdaş Bul</string>
 
-    <string name="prompt_email_address">Email Adresi</string>
-    <string name="prompt_password">Parola</string>
+    <string name="prompt_email_address">isminiz@std.yildiz.edu.tr</string>
+    <string name="prompt_password">●●●●●●●●</string>
+    <string name="prompt_full_name">İsim ve Soyisim</string>
+    <string name="prompt_phone_number">Telefon Numarası</string>
+    <string name="prompt_department">Bölüm</string>
+    <string name="prompt_grade">Sınıf</string>
+    <string name="prompt_have_an_account">Bir hesabınız var mı?</string>
 
     <string name="button_login">Giriş Yap</string>
     <string name="button_signup">Kayıt Ol</string>
     <string name="button_forgot_password">Şifremi Unuttum</string>
+    <string name="button_take_picture">Fotoğraf Çek</string>
+    <string name="button_upload_picture">Fotoğraf Yükle</string>
 
-    <string name="title_login_page">Giriş Yapın</string>
+    <string name="description_profile_picture">Profil Fotoğrafı</string>
+
+    <string name="title_signup_page">Kayıt Olun</string>
 </resources>
