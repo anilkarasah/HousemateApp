@@ -48,6 +48,7 @@ public class MainPageActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
 
+        view_users = findViewById(R.id.mainPageUsersView);
         UserAdapter userAdapter = new UserAdapter(users, this, user -> Toast.makeText(this, user.fullName, Toast.LENGTH_SHORT).show());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         view_users.setAdapter(userAdapter);
@@ -60,8 +61,6 @@ public class MainPageActivity extends AppCompatActivity {
             Intent menuIntent = new Intent(this, MenuActivity.class);
             startActivity(menuIntent);
         });
-
-        view_users = findViewById(R.id.mainPageUsersView);
 
         db.collection(User.COLLECTION_NAME)
             .get()
