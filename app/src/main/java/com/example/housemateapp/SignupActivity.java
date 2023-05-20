@@ -3,11 +3,13 @@ package com.example.housemateapp;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -101,6 +103,10 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         button_signup.setOnClickListener(view -> {
+            Drawable inactiveButton = AppCompatResources.getDrawable(this, R.drawable.custom_button_inactive);
+            button_signup.setBackground(inactiveButton);
+            button_signup.setEnabled(false);
+
             String fullName = text_fullName.getText().toString().trim();
             String emailAddress = text_emailAddress.getText().toString().trim();
             String password = text_password.getText().toString();
@@ -142,6 +148,11 @@ public class SignupActivity extends AppCompatActivity {
                         .addOnFailureListener(e -> Log.i("SignupActivity/Storage", e.getMessage()));
 
                     firebaseUser.sendEmailVerification()
+                        .addOnFailureListener(e -> {
+                            Drawable activeButton = AppCompatResources.getDrawable(this, R.drawable.custom_button);
+                            button_signup.setBackground(activeButton);
+                            button_signup.setEnabled(true);
+                        })
                         .addOnSuccessListener(unused -> {
                             Toast.makeText(this, "Doğrulama maili gönderildi!", Toast.LENGTH_SHORT).show();
                             Intent loginIntent = new Intent(this, LoginActivity.class);

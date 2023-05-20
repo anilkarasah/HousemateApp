@@ -1,8 +1,10 @@
 package com.example.housemateapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,11 +53,20 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         button_login.setOnClickListener(view -> {
+            Drawable inactiveButton = AppCompatResources.getDrawable(this, R.drawable.custom_button_inactive);
+            button_login.setBackground(inactiveButton);
+            button_login.setEnabled(false);
+
             String emailAddress = text_emailAddress.getText().toString();
             String password = text_password.getText().toString();
 
             mAuth.signInWithEmailAndPassword(emailAddress, password)
-                .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Drawable activeButton = AppCompatResources.getDrawable(this, R.drawable.custom_button);
+                    button_login.setBackground(activeButton);
+                    button_login.setEnabled(true);
+                })
                 .addOnSuccessListener(authResult -> {
                     Intent mainIntent = new Intent(this, MainPageActivity.class);
                     startActivity(mainIntent);

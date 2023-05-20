@@ -1,8 +1,10 @@
 package com.example.housemateapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,10 +41,20 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
 
         button_sendConfirmation.setOnClickListener(view -> {
+            Drawable inactiveButton = AppCompatResources.getDrawable(this, R.drawable.custom_button_inactive);
+            button_sendConfirmation.setBackground(inactiveButton);
+            button_sendConfirmation.setEnabled(false);
+
             String emailAddress = text_emailAddress.getText().toString();
 
             mAuth.sendPasswordResetEmail(emailAddress)
-                .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> {
+                    Drawable activeButton = AppCompatResources.getDrawable(this, R.drawable.custom_button);
+                    button_sendConfirmation.setBackground(activeButton);
+                    button_sendConfirmation.setEnabled(true);
+
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                })
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(this, R.string.prompt_send_confirmation_email, Toast.LENGTH_SHORT).show();
 
