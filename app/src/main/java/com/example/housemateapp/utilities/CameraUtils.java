@@ -30,6 +30,7 @@ public class CameraUtils {
     public static final int PERMISSION_REQUEST_CODE = 100;
     public static final int CAMERA_PERM_CODE = 101;
     public static final int TWO_MEGABYTES = 2 * 1024 * 1024;
+    public static final int COMPRESS_QUALITY = 90;
 
     public static void askCameraPermissions(Activity activity) {
         if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -50,7 +51,7 @@ public class CameraUtils {
     public static byte[] getBitmapData(ImageView imageView) {
         Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, COMPRESS_QUALITY, baos);
         return baos.toByteArray();
     }
 
