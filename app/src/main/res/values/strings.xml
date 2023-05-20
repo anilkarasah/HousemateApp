@@ -9,7 +9,7 @@
     <string name="prompt_grade">Sınıf</string>
     <string name="prompt_have_an_account">Bir hesabınız var mı?</string>
     <string name="prompt_send_confirmation_email">Doğrulama maili gönderildi.</string>
-    <string name="prompt_range_in_kilometers">Aranan Uzaklık (kilometre)</string>
+    <string name="prompt_range_in_kilometers">Aranan Uzaklık</string>
     <string name="prompt_will_stay_for_days">Kalınacak Gün Sayısı</string>
 
     <string name="button_login">Giriş Yap</string>
@@ -27,6 +27,15 @@
 
     <string name="description_profile_picture">Profil Fotoğrafı</string>
     <string name="description_menu">Menü</string>
+    <string name="description_full_name">İsminiz ve Soyisminiz</string>
+    <string name="description_phone_number">Telefon Numaranız</string>
+    <string name="description_department">Bölümünüz</string>
+    <string name="description_your_grade">Sınıfınız</string>
+    <string name="description_distance">Kampüse Uzaklık (km)</string>
+    <string name="description_stay_for">Kalacağınız Gün Sayısı</string>
+    <string name="description_looking_for">Geçerli Arama Durumunuz</string>
+    <string name="description_current_password">Geçerli Parolanız</string>
+    <string name="description_new_password">Yeni Parolanız</string>
 
     <string name="title_signup_page">Kayıt Olun</string>
     <string name="title_profile_page">Profil</string>
@@ -47,4 +56,10 @@
     <string name="message_password_updated">Parola başarıyla güncellendi.</string>
     <string name="message_verify_email_address">Lütfen email adresinizi doğrulayın.</string>
     <string name="message_login_again">Lütfen tekrar giriş yapınız.</string>
+
+    <string-array name="status_types">
+        <item>Aramıyor</item>
+        <item>Kalacak Ev/Oda Arıyor</item>
+        <item>Ev/Oda Arkadaşı Arıyor</item>
+    </string-array>
 </resources>

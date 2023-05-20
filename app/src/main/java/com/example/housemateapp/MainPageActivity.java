@@ -90,7 +90,7 @@ public class MainPageActivity extends AppCompatActivity {
                     String department = userMap.get(User.DEPARTMENT).toString();
                     int grade = Integer.parseInt(userMap.get(User.GRADE).toString());
 
-                    User user = new User(fullName, emailAddress, phoneNumber, department, grade, 0, 0);
+                    User user = new User(fullName, emailAddress, phoneNumber, department, grade, 0, 0, null);
                     user.uid = uid;
 
                     storage.getReference()

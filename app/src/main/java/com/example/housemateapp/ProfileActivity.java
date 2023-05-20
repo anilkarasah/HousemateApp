@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -31,7 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     ImageView image_menuButton;
 
     // image section
@@ -47,6 +50,8 @@ public class ProfileActivity extends AppCompatActivity {
     EditText text_grade;
     EditText text_rangeInKilometers;
     EditText text_willStayForDays;
+    private int selectedDegreeIndex = 0;
+    Spinner spinner_statusType;
     Button button_updateInformation;
 
     // email address section
@@ -90,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
         text_grade = findViewById(R.id.textProfileGrade);
         text_rangeInKilometers = findViewById(R.id.textProfileRangeInKilometers);
         text_willStayForDays = findViewById(R.id.textProfileWillStayForDays);
+        spinner_statusType = findViewById(R.id.spinnerStatusType);
         button_updateInformation = findViewById(R.id.buttonUpdateProfile);
         text_emailAddress = findViewById(R.id.textProfileEmailAddress);
         button_updateEmailAddress = findViewById(R.id.buttonUpdateEmailAddress);
@@ -135,14 +141,28 @@ public class ProfileActivity extends AppCompatActivity {
                 text_department.setText(userMap.get(User.DEPARTMENT).toString());
                 text_grade.setText(userMap.get(User.GRADE).toString());
 
-                String rangeInKilometers = userMap.get(User.RANGE_IN_KILOMETERS).toString();
-                if (!TextUtils.isEmpty(rangeInKilometers)) {
-                    text_rangeInKilometers.setText(rangeInKilometers);
+                Object rangeInKilometers = userMap.get(User.RANGE_IN_KILOMETERS);
+                if (rangeInKilometers != null && !TextUtils.isEmpty(rangeInKilometers.toString())) {
+                    text_rangeInKilometers.setText(rangeInKilometers.toString());
                 }
 
-                String willStayForDays = userMap.get(User.WILL_STAY_FOR_DAYS).toString();
-                if (!TextUtils.isEmpty(willStayForDays)) {
-                    text_willStayForDays.setText(willStayForDays);
+                Object willStayForDays = userMap.get(User.WILL_STAY_FOR_DAYS);
+                if (willStayForDays != null && !TextUtils.isEmpty(willStayForDays.toString())) {
+                    text_willStayForDays.setText(willStayForDays.toString());
+                }
+
+                Object statusType = userMap.get(User.STATUS_TYPE);
+                if (statusType != null) {
+                    int i = 0;
+                    String[] statusTypes = getResources().getStringArray(R.array.status_types);
+                    while (i < statusTypes.length && !statusType.toString().equalsIgnoreCase(statusTypes[i]))
+                        i++;
+
+                    if (i < statusTypes.length) {
+                        spinner_statusType.setSelection(i);
+                    } else {
+                        spinner_statusType.setSelection(0);
+                    }
                 }
             });
 
@@ -154,6 +174,13 @@ public class ProfileActivity extends AppCompatActivity {
                 Bitmap profilePictureBitmap = CameraUtils.getBitmap(bytes);
                 image_profilePicture.setImageBitmap(profilePictureBitmap);
             });
+
+        // SET SPINNER VALUES FOR STATUS TYPE
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter
+            .createFromResource(this, R.array.status_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_statusType.setAdapter(adapter);
+        spinner_statusType.setOnItemSelectedListener(this);
 
         // PROFILE PICTURE SECTION
         ActivityResultLauncher<Intent> takePictureActivityResultLauncher = CameraUtils
@@ -206,6 +233,9 @@ public class ProfileActivity extends AppCompatActivity {
 
             String uid = firebaseUser.getUid();
 
+            String[] statusTypes = getResources().getStringArray(R.array.status_types);
+            String selectedStatusType = statusTypes[selectedDegreeIndex];
+
             Map<String, Object> userMap = new HashMap<>();
 
             String fullName = text_fullName.getText().toString().trim();
@@ -216,6 +246,7 @@ public class ProfileActivity extends AppCompatActivity {
             userMap.put(User.GRADE, Integer.parseInt(text_grade.getText().toString().trim()));
             userMap.put(User.RANGE_IN_KILOMETERS, Double.parseDouble(text_rangeInKilometers.getText().toString().trim()));
             userMap.put(User.WILL_STAY_FOR_DAYS, Integer.parseInt(text_willStayForDays.getText().toString().trim()));
+            userMap.put(User.STATUS_TYPE, selectedStatusType);
 
             db.collection(User.COLLECTION_NAME)
                 .document(uid)
@@ -296,6 +327,16 @@ public class ProfileActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.message_permission_gallery_required, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        selectedDegreeIndex = i;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        selectedDegreeIndex = 0;
     }
 
     private void disableButton(Button button) {

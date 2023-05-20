@@ -55,7 +55,7 @@
                         android:background="@drawable/profile_picture_holder"
                         android:contentDescription="@string/description_profile_picture"
                         android:padding="4dp"
-                        android:src="@drawable/ic_person" />
+                        android:src="@drawable/ic_person_black" />
 
                     <Button
                         android:id="@+id/buttonProfileTakePicture"
@@ -118,93 +118,229 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/textProfileFullName"
+                <LinearLayout
                     android:layout_width="320dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:autofillHints="username"
-                    android:background="@drawable/custom_input"
-                    android:drawableStart="@drawable/ic_person"
-                    android:drawablePadding="8dp"
-                    android:ems="10"
-                    android:hint="@string/prompt_full_name"
-                    android:inputType="textPersonName"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="12dp" />
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
 
-                <EditText
-                    android:id="@+id/textProfilePhoneNumber"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="12dp"
-                    android:autofillHints="date"
-                    android:background="@drawable/custom_input"
-                    android:drawableStart="@drawable/ic_phone"
-                    android:drawablePadding="8dp"
-                    android:ems="10"
-                    android:hint="@string/prompt_phone_number"
-                    android:inputType="phone"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="12dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/description_full_name"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/textProfileDepartment"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="12dp"
-                    android:autofillHints="date"
-                    android:background="@drawable/custom_input"
-                    android:drawableStart="@drawable/ic_building"
-                    android:drawablePadding="8dp"
-                    android:ems="10"
-                    android:hint="@string/prompt_department"
-                    android:inputType="text"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="12dp" />
+                    <EditText
+                        android:id="@+id/textProfileFullName"
+                        android:layout_width="320dp"
+                        android:layout_height="48dp"
+                        android:autofillHints="username"
+                        android:background="@drawable/custom_input"
+                        android:drawableStart="@drawable/ic_person"
+                        android:drawablePadding="8dp"
+                        android:ems="10"
+                        android:hint="@string/prompt_full_name"
+                        android:inputType="textPersonName"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
 
-                <EditText
-                    android:id="@+id/textProfileGrade"
+                <LinearLayout
                     android:layout_width="320dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:autofillHints="date"
-                    android:background="@drawable/custom_input"
-                    android:drawableStart="@drawable/ic_grade"
-                    android:drawablePadding="8dp"
-                    android:ems="10"
-                    android:hint="@string/prompt_grade"
-                    android:inputType="numberSigned"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="12dp" />
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
 
-                <EditText
-                    android:id="@+id/textProfileRangeInKilometers"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/custom_input"
-                    android:drawableStart="@drawable/ic_distance"
-                    android:drawablePadding="8dp"
-                    android:ems="10"
-                    android:hint="@string/prompt_range_in_kilometers"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="12dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/description_phone_number"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/textProfileWillStayForDays"
+                    <EditText
+                        android:id="@+id/textProfilePhoneNumber"
+                        android:layout_width="320dp"
+                        android:layout_height="48dp"
+                        android:autofillHints="date"
+                        android:background="@drawable/custom_input"
+                        android:drawableStart="@drawable/ic_phone"
+                        android:drawablePadding="8dp"
+                        android:ems="10"
+                        android:hint="@string/prompt_phone_number"
+                        android:inputType="phone"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="320dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:background="@drawable/custom_input"
-                    android:drawableStart="@drawable/ic_calendar"
-                    android:drawablePadding="8dp"
-                    android:ems="10"
-                    android:hint="@string/prompt_will_stay_for_days"
-                    android:inputType="numberSigned"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="12dp" />
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/description_department"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/textProfileDepartment"
+                        android:layout_width="320dp"
+                        android:layout_height="48dp"
+                        android:autofillHints="date"
+                        android:background="@drawable/custom_input"
+                        android:drawableStart="@drawable/ic_building"
+                        android:drawablePadding="8dp"
+                        android:ems="10"
+                        android:hint="@string/prompt_department"
+                        android:inputType="text"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/description_your_grade"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/textProfileGrade"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/custom_input"
+                        android:drawableStart="@drawable/ic_grade"
+                        android:drawablePadding="8dp"
+                        android:ems="10"
+                        android:hint="@string/prompt_grade"
+                        android:inputType="numberSigned"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/description_distance"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/textProfileRangeInKilometers"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/custom_input"
+                        android:drawableStart="@drawable/ic_distance"
+                        android:drawablePadding="8dp"
+                        android:ems="10"
+                        android:hint="@string/prompt_range_in_kilometers"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/description_stay_for"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/textProfileWillStayForDays"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/custom_input"
+                        android:drawableStart="@drawable/ic_calendar"
+                        android:drawablePadding="8dp"
+                        android:ems="10"
+                        android:hint="@string/prompt_will_stay_for_days"
+                        android:inputType="numberSigned"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/description_looking_for"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="320dp"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="@drawable/custom_input"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0"
+                            android:contentDescription="@string/description_looking_for"
+                            android:src="@drawable/ic_search" />
+
+                        <Spinner
+                            android:id="@+id/spinnerStatusType"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:spinnerMode="dropdown" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/buttonUpdateProfile"
@@ -294,37 +430,71 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/textProfileCurrentPassword"
+                <LinearLayout
                     android:layout_width="320dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:autofillHints="password"
-                    android:background="@drawable/custom_input"
-                    android:drawableStart="@drawable/ic_lock"
-                    android:drawablePadding="8dp"
-                    android:ems="10"
-                    android:hint="@string/prompt_password"
-                    android:inputType="textPassword"
-                    android:labelFor="@+id/textViewPassword"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="12dp" />
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
 
-                <EditText
-                    android:id="@+id/textProfileNewPassword"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/description_current_password"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/textProfileCurrentPassword"
+                        android:layout_width="320dp"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="12dp"
+                        android:autofillHints="password"
+                        android:background="@drawable/custom_input"
+                        android:drawableStart="@drawable/ic_lock"
+                        android:drawablePadding="8dp"
+                        android:ems="10"
+                        android:hint="@string/prompt_password"
+                        android:inputType="textPassword"
+                        android:labelFor="@+id/textViewPassword"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="24dp"
-                    android:autofillHints="password"
-                    android:background="@drawable/custom_input"
-                    android:drawableStart="@drawable/ic_key"
-                    android:drawablePadding="8dp"
-                    android:ems="10"
-                    android:hint="@string/prompt_password"
-                    android:inputType="textPassword"
-                    android:labelFor="@+id/textViewPassword"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="12dp" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/description_new_password"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/textProfileNewPassword"
+                        android:layout_width="320dp"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="24dp"
+                        android:autofillHints="password"
+                        android:background="@drawable/custom_input"
+                        android:drawableStart="@drawable/ic_key"
+                        android:drawablePadding="8dp"
+                        android:ems="10"
+                        android:hint="@string/prompt_password"
+                        android:inputType="textPassword"
+                        android:labelFor="@+id/textViewPassword"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/buttonUpdatePassword"

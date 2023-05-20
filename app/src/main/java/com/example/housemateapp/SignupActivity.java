@@ -111,7 +111,7 @@ public class SignupActivity extends AppCompatActivity {
             int grade = Integer.parseInt(text_grade.getText().toString());
 
             User user = new User(
-                fullName, emailAddress, phoneNumber, department, grade, 0, 0);
+                fullName, emailAddress, phoneNumber, department, grade, 0, 0, null);
 
             if (!validateUserData(user)) {
                 return;
