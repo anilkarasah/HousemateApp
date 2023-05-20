@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -73,5 +74,22 @@ public class User {
             Intent loginIntent = new Intent(activity, LoginActivity.class);
             activity.startActivity(loginIntent);
         }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "User{" +
+            "uid='" + uid + '\'' +
+            ", fullName='" + fullName + '\'' +
+            ", emailAddress='" + emailAddress + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", department='" + department + '\'' +
+            ", grade=" + grade +
+            ", rangeInKilometers=" + rangeInKilometers +
+            ", willStayForDays=" + willStayForDays +
+            ", statusType='" + statusType + '\'' +
+            ", profilePicture=" + profilePicture +
+            '}';
     }
 }

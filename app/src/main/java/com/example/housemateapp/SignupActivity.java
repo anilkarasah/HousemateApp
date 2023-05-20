@@ -139,7 +139,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     byte[] data = CameraUtils.getBitmapData(image_profilePicture);
                     storage.getReference()
-                        .child("profiles/" + uid + ".jpg")
+                        .child(CameraUtils.getStorageChild(uid))
                         .putBytes(data)
                         .addOnFailureListener(e -> Log.i("SignupActivity/Storage", e.getMessage()));
 

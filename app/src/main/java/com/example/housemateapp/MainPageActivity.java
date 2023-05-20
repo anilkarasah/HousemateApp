@@ -1,5 +1,6 @@
 package com.example.housemateapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +39,7 @@ public class MainPageActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseStorage storage;
 
-    ArrayList<User> users = new ArrayList<>();
+    private final ArrayList<User> users = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,20 +92,36 @@ public class MainPageActivity extends AppCompatActivity {
                     String department = userMap.get(User.DEPARTMENT).toString();
                     int grade = Integer.parseInt(userMap.get(User.GRADE).toString());
 
-                    User user = new User(fullName, emailAddress, phoneNumber, department, grade, 0, 0, null);
+                    double rangeInKilometers = 0;
+                    Object rangeInKilometersObject = userMap.get(User.RANGE_IN_KILOMETERS);
+                    if (rangeInKilometersObject != null) {
+                        rangeInKilometers = Double.parseDouble(rangeInKilometersObject.toString());
+                    }
+
+                    int willStayForDays = 0;
+                    Object willStayForDaysObject = userMap.get(User.WILL_STAY_FOR_DAYS);
+                    if (willStayForDaysObject != null) {
+                        willStayForDays = Integer.parseInt(willStayForDaysObject.toString());
+                    }
+
+                    String statusType = "Belirtilmemiş";
+                    Object statusTypeObject = userMap.get(User.STATUS_TYPE);
+                    if (statusTypeObject != null) {
+                        statusType = statusTypeObject.toString();
+                    }
+
+                    User user = new User(fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays, statusType);
                     user.uid = uid;
 
                     storage.getReference()
-                        .child("profiles/" + uid + ".jpg")
+                        .child(CameraUtils.getStorageChild(uid))
                         .getBytes(CameraUtils.TWO_MEGABYTES)
                         .addOnFailureListener(e -> Log.i("MainPageActivity/Storage", "Error retrieving profile picture of user with ID: " + uid))
                         .addOnSuccessListener(bytes -> {
                             user.profilePicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            users.add(user);
                             userAdapter.notifyItemChanged(users.indexOf(user));
                         });
-
-                    users.add(user);
-                    userAdapter.notifyItemChanged(users.indexOf(user));
                 }
             });
     }

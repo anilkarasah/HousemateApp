@@ -1,6 +1,8 @@
 package com.example.housemateapp.utilities;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,6 @@ import com.example.housemateapp.R;
 import com.example.housemateapp.entities.User;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<User> users;
@@ -26,15 +27,23 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LinearLayout layout_userHolder;
         ImageView image_avatar;
         TextView text_fullName;
-        TextView text_studentInfo;
+        TextView text_department;
+        TextView text_grade;
+        TextView text_rangeInKilometers;
+        TextView text_willStayForDays;
+        TextView text_statusType;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
 
             layout_userHolder = itemView.findViewById(R.id.userCard);
-            image_avatar = itemView.findViewById(R.id.imageUserAvatar);
-            text_fullName = itemView.findViewById(R.id.textUserFullName);
-            text_studentInfo = itemView.findViewById(R.id.textUserStudentInfo);
+            image_avatar = itemView.findViewById(R.id.imageUserHolderProfilePicture);
+            text_fullName = itemView.findViewById(R.id.textUserHolderFullName);
+            text_department = itemView.findViewById(R.id.textUserHolderDepartment);
+            text_grade = itemView.findViewById(R.id.textUserHolderGrade);
+            text_rangeInKilometers = itemView.findViewById(R.id.textUserHolderRangeInKilometers);
+            text_willStayForDays = itemView.findViewById(R.id.textUserHolderWillStayForDays);
+            text_statusType = itemView.findViewById(R.id.textUserHolderStatusType);
         }
     }
 
@@ -60,11 +69,22 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (user == null) return;
 
         UserViewHolder viewHolder = (UserViewHolder) holder;
+        Resources resources = mContext.getResources();
+
         viewHolder.text_fullName.setText(user.fullName);
         viewHolder.image_avatar.setImageBitmap(user.profilePicture);
+        viewHolder.text_department.setText(user.department);
 
-        String studentInfo = String.format(Locale.ENGLISH, "%s, %d. sınıf öğrencisi", user.department, user.grade);
-        viewHolder.text_studentInfo.setText(studentInfo);
+        String gradeString = resources.getString(R.string.display_grade, user.grade);
+        viewHolder.text_grade.setText(gradeString);
+
+        String rangeInKilometersString = resources.getString(R.string.display_range_in_kilometers, user.rangeInKilometers);
+        viewHolder.text_rangeInKilometers.setText(rangeInKilometersString);
+
+        String willStayForDaysString = resources.getString(R.string.display_will_stay_for_days, user.willStayForDays);
+        viewHolder.text_willStayForDays.setText(willStayForDaysString);
+
+        viewHolder.text_statusType.setText(user.statusType);
 
         viewHolder.layout_userHolder.setOnClickListener(view -> callback.onItemClick(user));
     }

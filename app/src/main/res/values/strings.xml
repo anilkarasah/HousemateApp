@@ -57,6 +57,10 @@
     <string name="message_verify_email_address">Lütfen email adresinizi doğrulayın.</string>
     <string name="message_login_again">Lütfen tekrar giriş yapınız.</string>
 
+    <string name="display_grade">%1$d. Sınıf</string>
+    <string name="display_range_in_kilometers">%1$.1f km</string>
+    <string name="display_will_stay_for_days">%1$d gün</string>
+
     <string-array name="status_types">
         <item>Aramıyor</item>
         <item>Kalacak Ev/Oda Arıyor</item>
