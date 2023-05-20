@@ -2,9 +2,11 @@ package com.example.housemateapp;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -114,6 +116,45 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(loginIntent);
         });
 
+        // POPULATE USER DATA
+        db.collection(User.COLLECTION_NAME)
+            .document(firebaseUser.getUid())
+            .get()
+            .addOnFailureListener(e -> {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                startActivity(loginIntent);
+            })
+            .addOnSuccessListener(documentSnapshot -> {
+                Map<String, Object> userMap = documentSnapshot.getData();
+
+                assert userMap != null;
+                text_emailAddress.setText(userMap.get(User.EMAIL_ADDRESS).toString());
+                text_fullName.setText(userMap.get(User.FULL_NAME).toString());
+                text_phoneNumber.setText(userMap.get(User.PHONE_NUMBER).toString());
+                text_department.setText(userMap.get(User.DEPARTMENT).toString());
+                text_grade.setText(userMap.get(User.GRADE).toString());
+
+                String rangeInKilometers = userMap.get(User.RANGE_IN_KILOMETERS).toString();
+                if (!TextUtils.isEmpty(rangeInKilometers)) {
+                    text_rangeInKilometers.setText(rangeInKilometers);
+                }
+
+                String willStayForDays = userMap.get(User.WILL_STAY_FOR_DAYS).toString();
+                if (!TextUtils.isEmpty(willStayForDays)) {
+                    text_willStayForDays.setText(willStayForDays);
+                }
+            });
+
+        storage.getReference()
+            .child(CameraUtils.getStorageChild(firebaseUser.getUid()))
+            .getBytes(CameraUtils.TWO_MEGABYTES)
+            .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show())
+            .addOnSuccessListener(bytes -> {
+                Bitmap profilePictureBitmap = CameraUtils.getBitmap(bytes);
+                image_profilePicture.setImageBitmap(profilePictureBitmap);
+            });
+
         // PROFILE PICTURE SECTION
         ActivityResultLauncher<Intent> takePictureActivityResultLauncher = CameraUtils
             .configureTakePictureLauncher(this, croppedBitmap -> image_profilePicture.setImageBitmap(croppedBitmap));
@@ -167,14 +208,14 @@ public class ProfileActivity extends AppCompatActivity {
 
             Map<String, Object> userMap = new HashMap<>();
 
-            String fullName = text_fullName.getText().toString();
+            String fullName = text_fullName.getText().toString().trim();
 
             userMap.put(User.FULL_NAME, fullName);
-            userMap.put(User.PHONE_NUMBER, text_phoneNumber.getText().toString());
-            userMap.put(User.DEPARTMENT, text_department.getText().toString());
-            userMap.put(User.GRADE, Integer.parseInt(text_grade.getText().toString()));
-            userMap.put(User.RANGE_IN_KILOMETERS, Double.parseDouble(text_rangeInKilometers.getText().toString()));
-            userMap.put(User.WILL_STAY_FOR_DAYS, Integer.parseInt(text_willStayForDays.getText().toString()));
+            userMap.put(User.PHONE_NUMBER, text_phoneNumber.getText().toString().trim());
+            userMap.put(User.DEPARTMENT, text_department.getText().toString().trim());
+            userMap.put(User.GRADE, Integer.parseInt(text_grade.getText().toString().trim()));
+            userMap.put(User.RANGE_IN_KILOMETERS, Double.parseDouble(text_rangeInKilometers.getText().toString().trim()));
+            userMap.put(User.WILL_STAY_FOR_DAYS, Integer.parseInt(text_willStayForDays.getText().toString().trim()));
 
             db.collection(User.COLLECTION_NAME)
                 .document(uid)
@@ -196,7 +237,7 @@ public class ProfileActivity extends AppCompatActivity {
         button_updateEmailAddress.setOnClickListener(view -> {
             disableButton(button_updateEmailAddress);
 
-            String newEmailAddress = text_emailAddress.getText().toString();
+            String newEmailAddress = text_emailAddress.getText().toString().trim();
 
             firebaseUser.verifyBeforeUpdateEmail(newEmailAddress)
                 .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show())
