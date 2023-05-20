@@ -29,6 +29,8 @@
     <string name="description_menu">Menü</string>
 
     <string name="title_signup_page">Kayıt Olun</string>
+    <string name="title_profile_page">Profil</string>
+    <string name="title_main_page">Ana Sayfa</string>
     <string name="title_section_profile_picture">Profil Fotoğrafınız</string>
     <string name="title_section_profile_information">Bilgileriniz</string>
     <string name="title_section_email_address">Email Adresiniz</string>
