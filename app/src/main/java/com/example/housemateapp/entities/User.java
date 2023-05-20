@@ -1,12 +1,17 @@
 package com.example.housemateapp.entities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.housemateapp.LoginActivity;
 import com.example.housemateapp.R;
 import com.example.housemateapp.utilities.ValidationException;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class User {
     public static final String COLLECTION_NAME = "users";
@@ -26,13 +31,13 @@ public class User {
     public String phoneNumber;
     public String department;
     public int grade;
-    public int rangeInKilometers;
+    public double rangeInKilometers;
     public int willStayForDays;
 
     @Nullable
     public Bitmap profilePicture;
 
-    public User(String fullName, String emailAddress, String phoneNumber, String department, int grade, int rangeInKilometers, int willStayForDays) {
+    public User(String fullName, String emailAddress, String phoneNumber, String department, int grade, double rangeInKilometers, int willStayForDays) {
         this.fullName = fullName;
         this.emailAddress = emailAddress;
         this.phoneNumber = phoneNumber;
@@ -53,6 +58,17 @@ public class User {
 
         if (domains.length != 2 || !domains[1].equalsIgnoreCase("std.yildiz.edu.tr")) {
             throw new ValidationException("Email adresi \"example@std.yildiz.edu.tr\" formatında olmalıdır.");
+        }
+    }
+
+    public static void assertAuthentication(AppCompatActivity activity) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() == null) {
+            Toast.makeText(activity, "Lütfen tekrar giriş yapınız.", Toast.LENGTH_SHORT).show();
+
+            Intent loginIntent = new Intent(activity, LoginActivity.class);
+            activity.startActivity(loginIntent);
         }
     }
 }

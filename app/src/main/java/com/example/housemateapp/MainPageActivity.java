@@ -48,6 +48,20 @@ public class MainPageActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
 
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+        if (firebaseUser == null) {
+            Toast.makeText(this, R.string.message_login_again, Toast.LENGTH_SHORT).show();
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            return;
+        }
+
+        if (!firebaseUser.isEmailVerified()) {
+            Toast.makeText(this, R.string.message_verify_email_address, Toast.LENGTH_SHORT).show();
+            firebaseUser.sendEmailVerification();
+        }
+
         view_users = findViewById(R.id.mainPageUsersView);
         UserAdapter userAdapter = new UserAdapter(users, this, user -> Toast.makeText(this, user.fullName, Toast.LENGTH_SHORT).show());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);

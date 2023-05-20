@@ -7,8 +7,6 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,8 +25,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-
-import java.io.ByteArrayOutputStream;
 
 public class SignupActivity extends AppCompatActivity {
     EditText text_fullName;
@@ -83,7 +79,7 @@ public class SignupActivity extends AppCompatActivity {
             if (getPackageManager().resolveActivity(cameraIntent, 0) != null) {
                 takePictureActivityResultLauncher.launch(cameraIntent);
             } else {
-                Toast.makeText(this, R.string.no_app_supporting, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.message_no_app_supporting, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -98,7 +94,7 @@ public class SignupActivity extends AppCompatActivity {
             if (getPackageManager().resolveActivity(intent, 0) != null) {
                 uploadPictureActivityResultLauncher.launch(intent);
             } else {
-                Toast.makeText(this, R.string.no_app_supporting, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.message_no_app_supporting, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -141,7 +137,7 @@ public class SignupActivity extends AppCompatActivity {
                         .set(user)
                         .addOnFailureListener(e -> Log.i("SignupActivity/Firestore", e.getMessage()));
 
-                    byte[] data = getBitmapData(image_profilePicture);
+                    byte[] data = CameraUtils.getBitmapData(image_profilePicture);
                     storage.getReference()
                         .child("profiles/" + uid + ".jpg")
                         .putBytes(data)
@@ -154,7 +150,7 @@ public class SignupActivity extends AppCompatActivity {
                             button_signup.setEnabled(true);
                         })
                         .addOnSuccessListener(unused -> {
-                            Toast.makeText(this, "Doğrulama maili gönderildi!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, R.string.message_confirmation_main_sent, Toast.LENGTH_SHORT).show();
                             Intent loginIntent = new Intent(this, LoginActivity.class);
                             startActivity(loginIntent);
                         });
@@ -168,20 +164,13 @@ public class SignupActivity extends AppCompatActivity {
 
         if (requestCode == CameraUtils.CAMERA_PERM_CODE) {
             if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, R.string.permission_camera, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.message_permission_camera_required, Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == CameraUtils.GET_FROM_GALLERY) {
             if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, R.string.permission_gallery, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.message_permission_gallery_required, Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private byte[] getBitmapData(ImageView imageView) {
-        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();
     }
 
     private boolean validateUserData(User user) {
