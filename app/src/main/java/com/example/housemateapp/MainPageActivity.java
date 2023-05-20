@@ -65,11 +65,39 @@ public class MainPageActivity extends AppCompatActivity {
         }
 
         view_users = findViewById(R.id.mainPageUsersView);
-        UserAdapter userAdapter = new UserAdapter(users, this, user -> Toast.makeText(this, user.fullName, Toast.LENGTH_SHORT).show());
+        UserAdapter userAdapter = new UserAdapter(users, this, user -> {
+            Intent userPageIntent = new Intent(MainPageActivity.this, UserPageActivity.class);
+            userPageIntent.putExtra(User.UID, user.uid);
+            startActivity(userPageIntent);
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         view_users.setAdapter(userAdapter);
         view_users.setItemAnimator(new DefaultItemAnimator());
         view_users.setLayoutManager(linearLayoutManager);
+
+        view_users.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                View childView = rv.findChildViewUnder(e.getX(), e.getY());
+
+                if (childView != null && e.getAction() == MotionEvent.ACTION_UP) {
+                    int position = rv.getChildAdapterPosition(childView);
+                    User clickedUser = users.get(position);
+
+                    Intent intent = new Intent(MainPageActivity.this, UserPageActivity.class);
+                    intent.putExtra(User.UID, clickedUser.uid);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
+        });
 
         image_menuButton = findViewById(R.id.imageMenuButton);
         image_menuButton.setVisibility(View.VISIBLE);
@@ -118,7 +146,7 @@ public class MainPageActivity extends AppCompatActivity {
                         .getBytes(CameraUtils.TWO_MEGABYTES)
                         .addOnFailureListener(e -> Log.i("MainPageActivity/Storage", "Error retrieving profile picture of user with ID: " + uid))
                         .addOnSuccessListener(bytes -> {
-                            user.profilePicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            user.profilePicture = CameraUtils.getBitmap(bytes);
                             users.add(user);
                             userAdapter.notifyItemChanged(users.indexOf(user));
                         });

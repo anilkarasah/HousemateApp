@@ -2,7 +2,6 @@ package com.example.housemateapp.utilities;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         LinearLayout layout_userHolder;
-        ImageView image_avatar;
+        ImageView image_profilePicture;
         TextView text_fullName;
         TextView text_department;
         TextView text_grade;
@@ -37,7 +36,7 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             super(itemView);
 
             layout_userHolder = itemView.findViewById(R.id.userCard);
-            image_avatar = itemView.findViewById(R.id.imageUserHolderProfilePicture);
+            image_profilePicture = itemView.findViewById(R.id.imageUserHolderProfilePicture);
             text_fullName = itemView.findViewById(R.id.textUserHolderFullName);
             text_department = itemView.findViewById(R.id.textUserHolderDepartment);
             text_grade = itemView.findViewById(R.id.textUserHolderGrade);
@@ -72,7 +71,7 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Resources resources = mContext.getResources();
 
         viewHolder.text_fullName.setText(user.fullName);
-        viewHolder.image_avatar.setImageBitmap(user.profilePicture);
+        viewHolder.image_profilePicture.setImageBitmap(user.profilePicture);
         viewHolder.text_department.setText(user.department);
 
         String gradeString = resources.getString(R.string.display_grade, user.grade);

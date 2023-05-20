@@ -24,6 +24,9 @@
     <string name="button_update_email_address">Adresi Güncelle</string>
     <string name="button_update_password">Parolayı Güncelle</string>
     <string name="button_logout">Çıkış Yap</string>
+    <string name="button_send_email">Email Gönder</string>
+    <string name="button_send_message">Mesaj Gönder</string>
+    <string name="button_text_with_whatsapp">Whatsapp ile Ulaş</string>
 
     <string name="description_profile_picture">Profil Fotoğrafı</string>
     <string name="description_menu">Menü</string>
