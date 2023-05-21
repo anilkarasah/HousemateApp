@@ -3,13 +3,16 @@ package com.example.housemateapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.housemateapp.entities.User;
 
@@ -17,6 +20,10 @@ public class UserFilterActivity extends AppCompatActivity {
 
     Button button_applyFilter;
 
+    SeekBar seekBar_range;
+    TextView text_rangeValue;
+    SeekBar seekBar_days;
+    TextView text_daysValue;
     Spinner spinner_statusType;
     Spinner spinner_sortBy;
 
@@ -30,11 +37,48 @@ public class UserFilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_filter);
 
-        button_applyFilter = findViewById(R.id.buttonApplyFilter);
+        seekBar_range = findViewById(R.id.seekBarUserFilterRange);
+        text_rangeValue = findViewById(R.id.textUserFilterRangeValue);
+        seekBar_days = findViewById(R.id.seekBarUserFilterStay);
+        text_daysValue = findViewById(R.id.textUserFilterStayValue);
         spinner_statusType = findViewById(R.id.spinnerFilterStatusType);
         spinner_sortBy = findViewById(R.id.spinnerSortingType);
         String[] statusTypes = getResources().getStringArray(R.array.status_types);
         String[] sortByTypes = getResources().getStringArray(R.array.sort_users_by);
+
+        seekBar_range.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Resources resources = getResources();
+                selectedRange = (double) i / 10;
+                String valueString = resources.getString(R.string.display_range_in_kilometers, selectedRange);
+                text_rangeValue.setText(valueString);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        seekBar_days.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Resources resources = getResources();
+                selectedDays = i;
+                String valueString = resources.getString(R.string.display_will_stay_for_days, i);
+                text_daysValue.setText(valueString);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        button_applyFilter = findViewById(R.id.buttonApplyFilter);
 
         button_applyFilter.setOnClickListener(view -> {
             Intent resultIntent = new Intent();
