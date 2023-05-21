@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:padding="8dp"
-                android:textColor="@color/black"
+                android:textColor="@color/text"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -47,7 +47,9 @@
                 android:id="@+id/textUserHolderDepartment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
                 android:padding="4dp"
+                android:textColor="@color/text"
                 app:drawableStartCompat="@drawable/ic_building_black" />
         </LinearLayout>
     </LinearLayout>
@@ -56,7 +58,8 @@
         android:id="@+id/textUserHolderStatusType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="4dp"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
         android:textColor="@color/text"
         app:drawableStartCompat="@drawable/ic_search_black" />
 
@@ -70,22 +73,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawablePadding="4dp"
             android:padding="4dp"
+            android:textColor="@color/accent"
             app:drawableStartCompat="@drawable/ic_grade" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="?android:attr/listDivider" />
 
         <TextView
             android:id="@+id/textUserHolderRangeInKilometers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawablePadding="4dp"
             android:padding="4dp"
+            android:textColor="@color/accent"
             app:drawableStartCompat="@drawable/ic_distance" />
+
+        <View
+            android:id="@+id/divider5"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="?android:attr/listDivider" />
 
         <TextView
             android:id="@+id/textUserHolderWillStayForDays"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawablePadding="4dp"
             android:padding="4dp"
             android:textColor="@color/accent"
             app:drawableStartCompat="@drawable/ic_calendar" />

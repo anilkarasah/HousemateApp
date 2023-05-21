@@ -2,19 +2,19 @@ package com.example.housemateapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.housemateapp.utilities.CameraUtils;
@@ -32,6 +32,9 @@ import java.util.Map;
 
 public class MainPageActivity extends AppCompatActivity {
     ImageView image_menuButton;
+
+    LinearLayout layout_filterSettings;
+    FragmentContainerView fragment_filterSettings;
 
     RecyclerView view_users;
 
@@ -64,6 +67,24 @@ public class MainPageActivity extends AppCompatActivity {
             firebaseUser.sendEmailVerification();
         }
 
+        layout_filterSettings = findViewById(R.id.layoutFilterSettings);
+        fragment_filterSettings = findViewById(R.id.fragmentFilterSettings);
+        UserFilterFragment filterFragment = new UserFilterFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+            .add(R.id.fragmentFilterSettings, filterFragment)
+            .commit();
+
+        fragment_filterSettings.setVisibility(View.INVISIBLE);
+
+        layout_filterSettings.setOnClickListener(view -> {
+            if (fragment_filterSettings.getVisibility() == View.VISIBLE) {
+                fragment_filterSettings.setVisibility(View.INVISIBLE);
+            } else {
+                fragment_filterSettings.setVisibility(View.VISIBLE);
+            }
+        });
+
         view_users = findViewById(R.id.mainPageUsersView);
         UserAdapter userAdapter = new UserAdapter(users, this, user -> {
             Intent userPageIntent = new Intent(MainPageActivity.this, UserPageActivity.class);
@@ -83,10 +104,11 @@ public class MainPageActivity extends AppCompatActivity {
                 if (childView != null && e.getAction() == MotionEvent.ACTION_UP) {
                     int position = rv.getChildAdapterPosition(childView);
                     User clickedUser = users.get(position);
+                    Toast.makeText(MainPageActivity.this, "nabers", Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(MainPageActivity.this, UserPageActivity.class);
-                    intent.putExtra(User.UID, clickedUser.uid);
-                    startActivity(intent);
+//                    Intent intent = new Intent(MainPageActivity.this, UserPageActivity.class);
+//                    intent.putExtra(User.UID, clickedUser.uid);
+//                    startActivity(intent);
                 }
             }
 

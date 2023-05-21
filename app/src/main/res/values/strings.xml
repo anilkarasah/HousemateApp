@@ -9,8 +9,12 @@
     <string name="prompt_grade">Sınıf</string>
     <string name="prompt_have_an_account">Bir hesabınız var mı?</string>
     <string name="prompt_send_confirmation_email">Doğrulama maili gönderildi.</string>
-    <string name="prompt_range_in_kilometers">Aranan Uzaklık</string>
+    <string name="prompt_filter">Filtrele</string>
+    <string name="prompt_range_in_kilometers">Kampüse Uzaklık</string>
     <string name="prompt_will_stay_for_days">Kalınacak Gün Sayısı</string>
+    <string name="prompt_filter_settings">Filtreleme Seçenekleri</string>
+    <string name="prompt_filter_by">Filtrele</string>
+    <string name="prompt_sort_by">Sırala</string>
 
     <string name="button_login">Giriş Yap</string>
     <string name="button_signup">Kayıt Ol</string>
@@ -39,6 +43,7 @@
     <string name="description_looking_for">Geçerli Arama Durumunuz</string>
     <string name="description_current_password">Geçerli Parolanız</string>
     <string name="description_new_password">Yeni Parolanız</string>
+    <string name="description_sort_by">Sıralama Türü</string>
 
     <string name="title_signup_page">Kayıt Olun</string>
     <string name="title_profile_page">Profil</string>
@@ -64,9 +69,21 @@
     <string name="display_range_in_kilometers">%1$.1f km</string>
     <string name="display_will_stay_for_days">%1$d gün</string>
 
+    <string name="filter_users_by_range">Kampüse Uzaklık</string>
+    <string name="filter_users_by_stay">Konaklama Süresi</string>
+    <string name="filter_users_by_status">Durum Bilgisi</string>
+
     <string-array name="status_types">
         <item>Aramıyor</item>
         <item>Kalacak Ev/Oda Arıyor</item>
         <item>Ev/Oda Arkadaşı Arıyor</item>
+    </string-array>
+
+    <string-array name="sort_users_by">
+        <item>Sırala</item>
+        <item>Kampüse Uzaklık (Artan)</item>
+        <item>Kampüse Uzaklık (Azalan)</item>
+        <item>Konaklama Süresi (Artan)</item>
+        <item>Konaklama Süresi (Azalan)</item>
     </string-array>
 </resources>

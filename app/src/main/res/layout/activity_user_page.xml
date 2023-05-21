@@ -41,7 +41,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:padding="8dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -50,35 +50,45 @@
                 android:id="@+id/textUserPageDepartment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
                 android:padding="8dp"
+                android:textColor="@color/text"
                 app:drawableStartCompat="@drawable/ic_building_black" />
 
             <TextView
                 android:id="@+id/textUserPageGrade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
                 android:padding="8dp"
+                android:textColor="@color/text"
                 app:drawableStartCompat="@drawable/ic_grade_black" />
 
             <TextView
                 android:id="@+id/textUserPageRangeInKilometers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
                 android:padding="8dp"
+                android:textColor="@color/text"
                 app:drawableStartCompat="@drawable/ic_distance_black" />
 
             <TextView
                 android:id="@+id/textUserPageWillStayForDays"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
                 android:padding="8dp"
+                android:textColor="@color/text"
                 app:drawableStartCompat="@drawable/ic_calendar_black" />
 
             <TextView
                 android:id="@+id/textUserPageStatusType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
                 android:padding="8dp"
+                android:textColor="@color/text"
                 app:drawableStartCompat="@drawable/ic_search_black" />
 
             <Button
