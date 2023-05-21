@@ -71,9 +71,9 @@
     <string name="display_range_in_kilometers">%1$.1f km</string>
     <string name="display_will_stay_for_days">%1$d gün</string>
 
-    <string name="filter_users_by_range">Kampüse Uzaklık</string>
-    <string name="filter_users_by_stay">Konaklama Süresi</string>
-    <string name="filter_users_by_status">Durum Bilgisi</string>
+    <string name="filter_users_by_range">Kampüse Uzaklık (en fazla)</string>
+    <string name="filter_users_by_stay">Konaklama Süresi (en fazla)</string>
+    <string name="filter_users_by_status">Ev/Oda Arama Durumu</string>
 
     <string-array name="status_types">
         <item>Aramıyor</item>

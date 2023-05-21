@@ -43,17 +43,16 @@
 
                 <SeekBar
                     android:id="@+id/seekBarUserFilterRange"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="1"
                     android:max="300"
                     android:padding="8dp" />
 
                 <TextView
                     android:id="@+id/textUserFilterRangeValue"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="center"
                     android:padding="8dp" />
             </LinearLayout>
@@ -82,17 +81,16 @@
 
                 <SeekBar
                     android:id="@+id/seekBarUserFilterStay"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="1"
                     android:max="365"
                     android:padding="8dp" />
 
                 <TextView
                     android:id="@+id/textUserFilterStayValue"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="center"
                     android:padding="8dp" />
             </LinearLayout>
@@ -131,7 +129,7 @@
                     android:id="@+id/spinnerFilterStatusType"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:spinnerMode="dialog" />
+                    android:spinnerMode="dropdown" />
 
             </LinearLayout>
         </LinearLayout>
@@ -177,7 +175,7 @@
                 android:id="@+id/spinnerSortingType"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:spinnerMode="dialog" />
+                android:spinnerMode="dropdown" />
 
         </LinearLayout>
     </LinearLayout>

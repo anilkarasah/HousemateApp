@@ -46,10 +46,14 @@ public class UserFilterActivity extends AppCompatActivity {
         String[] statusTypes = getResources().getStringArray(R.array.status_types);
         String[] sortByTypes = getResources().getStringArray(R.array.sort_users_by);
 
+        Resources resources = getResources();
+
+        text_rangeValue.setText(resources.getString(R.string.display_range_in_kilometers, 0f));
+        text_daysValue.setText(resources.getString(R.string.display_will_stay_for_days, 0));
+
         seekBar_range.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Resources resources = getResources();
                 selectedRange = (double) i / 10;
                 String valueString = resources.getString(R.string.display_range_in_kilometers, selectedRange);
                 text_rangeValue.setText(valueString);
@@ -65,7 +69,6 @@ public class UserFilterActivity extends AppCompatActivity {
         seekBar_days.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Resources resources = getResources();
                 selectedDays = i;
                 String valueString = resources.getString(R.string.display_will_stay_for_days, i);
                 text_daysValue.setText(valueString);

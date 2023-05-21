@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.housemateapp.utilities.ArrayListUtils;
 import com.example.housemateapp.utilities.CameraUtils;
 import com.example.housemateapp.utilities.UserAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,12 +77,19 @@ public class MainPageActivity extends AppCompatActivity {
             firebaseUser.sendEmailVerification();
         }
 
+        view_users = findViewById(R.id.mainPageUsersView);
+        UserAdapter userAdapter = new UserAdapter(users, this, user -> {
+            Intent userPageIntent = new Intent(MainPageActivity.this, UserPageActivity.class);
+            userPageIntent.putExtra(User.UID, user.uid);
+            startActivity(userPageIntent);
+        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        view_users.setAdapter(userAdapter);
+        view_users.setItemAnimator(new DefaultItemAnimator());
+        view_users.setLayoutManager(linearLayoutManager);
+
         layout_filterSettings = findViewById(R.id.layoutFilterSettings);
-//        UserFilterFragment filterFragment = new UserFilterFragment();
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction()
-//            .add(R.id.fragmentFilterSettings, filterFragment)
-//            .commit();
+
         ActivityResultLauncher<Intent> getFilterSettingsActivityResultLauncher = this.registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -95,8 +103,11 @@ public class MainPageActivity extends AppCompatActivity {
                 filterSelectedStatusType = data.getStringExtra(User.STATUS_TYPE);
                 filterSortBy = data.getStringExtra("sortType");
 
-                String printStatement = String.format(Locale.CANADA, "%.1f, %d, %s, %s", filterSelectedRange, filterSelectedDays, filterSelectedStatusType, filterSortBy);
-                Toast.makeText(this, printStatement, Toast.LENGTH_SHORT).show();
+                ArrayList<User> filteredUsers = ArrayListUtils.filterUsers(users, filterSelectedRange, filterSelectedDays, filterSelectedStatusType);
+                ArrayListUtils.sortUsersBy(filteredUsers, filterSortBy);
+
+                userAdapter.setUsers(filteredUsers);
+                userAdapter.notifyDataSetChanged();
             });
 
         layout_filterSettings.setOnClickListener(view -> {
@@ -106,42 +117,6 @@ public class MainPageActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.message_filter_not_active, Toast.LENGTH_SHORT).show();
             }
-        });
-
-        view_users = findViewById(R.id.mainPageUsersView);
-        UserAdapter userAdapter = new UserAdapter(users, this, user -> {
-            Intent userPageIntent = new Intent(MainPageActivity.this, UserPageActivity.class);
-            userPageIntent.putExtra(User.UID, user.uid);
-            startActivity(userPageIntent);
-        });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        view_users.setAdapter(userAdapter);
-        view_users.setItemAnimator(new DefaultItemAnimator());
-        view_users.setLayoutManager(linearLayoutManager);
-
-        view_users.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                View childView = rv.findChildViewUnder(e.getX(), e.getY());
-
-                if (childView != null && e.getAction() == MotionEvent.ACTION_UP) {
-                    int position = rv.getChildAdapterPosition(childView);
-                    User clickedUser = users.get(position);
-                    Toast.makeText(MainPageActivity.this, "nabers", Toast.LENGTH_SHORT).show();
-
-//                    Intent intent = new Intent(MainPageActivity.this, UserPageActivity.class);
-//                    intent.putExtra(User.UID, clickedUser.uid);
-//                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
         });
 
         image_menuButton = findViewById(R.id.imageMenuButton);
@@ -185,6 +160,8 @@ public class MainPageActivity extends AppCompatActivity {
 
                     User user = new User(fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays, statusType);
                     user.uid = uid;
+                    users.add(user);
+                    userAdapter.notifyItemChanged(users.indexOf(user));
 
                     storage.getReference()
                         .child(CameraUtils.getStorageChild(uid))
@@ -192,7 +169,6 @@ public class MainPageActivity extends AppCompatActivity {
                         .addOnFailureListener(e -> Log.i("MainPageActivity/Storage", "Error retrieving profile picture of user with ID: " + uid))
                         .addOnSuccessListener(bytes -> {
                             user.profilePicture = CameraUtils.getBitmap(bytes);
-                            users.add(user);
                             userAdapter.notifyItemChanged(users.indexOf(user));
                         });
                 }
@@ -204,13 +180,11 @@ public class MainPageActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && data != null) {
-            // Sonuçları işle
             filterSelectedRange = data.getDoubleExtra(User.RANGE_IN_KILOMETERS, 0f);
             filterSelectedDays = data.getIntExtra(User.WILL_STAY_FOR_DAYS, 0);
             filterSelectedStatusType = data.getStringExtra(User.STATUS_TYPE);
             filterSortBy = data.getStringExtra("sortType");
 
-            // RecyclerView'i güncelle veya yeniden oluştur
 //            updateRecyclerView();
         }
     }

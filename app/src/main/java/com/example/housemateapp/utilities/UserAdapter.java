@@ -93,6 +93,10 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return users.size();
     }
 
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+    }
+
     public interface OnClickCallback {
         void onItemClick(User user);
     }
