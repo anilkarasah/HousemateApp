@@ -1,6 +1,10 @@
 package com.example.housemateapp;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
@@ -28,13 +32,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.example.housemateapp.entities.User;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainPageActivity extends AppCompatActivity {
     ImageView image_menuButton;
 
     LinearLayout layout_filterSettings;
-    FragmentContainerView fragment_filterSettings;
+
+    double filterSelectedRange = 0f;
+    int filterSelectedDays = 0;
+    String filterSelectedStatusType = "";
+    String filterSortBy = "";
 
     RecyclerView view_users;
 
@@ -68,20 +77,34 @@ public class MainPageActivity extends AppCompatActivity {
         }
 
         layout_filterSettings = findViewById(R.id.layoutFilterSettings);
-        fragment_filterSettings = findViewById(R.id.fragmentFilterSettings);
-        UserFilterFragment filterFragment = new UserFilterFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-            .add(R.id.fragmentFilterSettings, filterFragment)
-            .commit();
+//        UserFilterFragment filterFragment = new UserFilterFragment();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction()
+//            .add(R.id.fragmentFilterSettings, filterFragment)
+//            .commit();
+        ActivityResultLauncher<Intent> getFilterSettingsActivityResultLauncher = this.registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() != RESULT_OK || result.getData() == null) {
+                    return;
+                }
 
-        fragment_filterSettings.setVisibility(View.INVISIBLE);
+                Intent data = result.getData();
+                filterSelectedRange = data.getDoubleExtra(User.RANGE_IN_KILOMETERS, 0f);
+                filterSelectedDays = data.getIntExtra(User.WILL_STAY_FOR_DAYS, 0);
+                filterSelectedStatusType = data.getStringExtra(User.STATUS_TYPE);
+                filterSortBy = data.getStringExtra("sortType");
+
+                String printStatement = String.format(Locale.CANADA, "%.1f, %d, %s, %s", filterSelectedRange, filterSelectedDays, filterSelectedStatusType, filterSortBy);
+                Toast.makeText(this, printStatement, Toast.LENGTH_SHORT).show();
+            });
 
         layout_filterSettings.setOnClickListener(view -> {
-            if (fragment_filterSettings.getVisibility() == View.VISIBLE) {
-                fragment_filterSettings.setVisibility(View.INVISIBLE);
+            Intent filterIntent = new Intent(MainPageActivity.this, UserFilterActivity.class);
+            if (getPackageManager().resolveActivity(filterIntent, 0) != null) {
+                getFilterSettingsActivityResultLauncher.launch(filterIntent);
             } else {
-                fragment_filterSettings.setVisibility(View.VISIBLE);
+                Toast.makeText(this, R.string.message_filter_not_active, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -174,5 +197,21 @@ public class MainPageActivity extends AppCompatActivity {
                         });
                 }
             });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && data != null) {
+            // Sonuçları işle
+            filterSelectedRange = data.getDoubleExtra(User.RANGE_IN_KILOMETERS, 0f);
+            filterSelectedDays = data.getIntExtra(User.WILL_STAY_FOR_DAYS, 0);
+            filterSelectedStatusType = data.getStringExtra(User.STATUS_TYPE);
+            filterSortBy = data.getStringExtra("sortType");
+
+            // RecyclerView'i güncelle veya yeniden oluştur
+//            updateRecyclerView();
+        }
     }
 }

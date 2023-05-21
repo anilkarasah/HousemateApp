@@ -31,6 +31,7 @@
     <string name="button_send_email">Email Gönder</string>
     <string name="button_send_message">Mesaj Gönder</string>
     <string name="button_text_with_whatsapp">Whatsapp ile Ulaş</string>
+    <string name="button_apply_filter">Uygula</string>
 
     <string name="description_profile_picture">Profil Fotoğrafı</string>
     <string name="description_menu">Menü</string>
@@ -64,6 +65,7 @@
     <string name="message_password_updated">Parola başarıyla güncellendi.</string>
     <string name="message_verify_email_address">Lütfen email adresinizi doğrulayın.</string>
     <string name="message_login_again">Lütfen tekrar giriş yapınız.</string>
+    <string name="message_filter_not_active">Filtreleme işlemi şuan desteklenmiyor.</string>
 
     <string name="display_grade">%1$d. Sınıf</string>
     <string name="display_range_in_kilometers">%1$.1f km</string>

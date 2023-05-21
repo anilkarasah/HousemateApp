@@ -221,9 +221,7 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
                 .child(CameraUtils.getStorageChild(firebaseUser.getUid()))
                 .putBytes(pictureBytes)
                 .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show())
-                .addOnSuccessListener(taskSnapshot -> {
-                    Toast.makeText(this, R.string.message_profile_picture_updated, Toast.LENGTH_SHORT).show();
-                })
+                .addOnSuccessListener(taskSnapshot -> Toast.makeText(this, R.string.message_profile_picture_updated, Toast.LENGTH_SHORT).show())
                 .addOnCompleteListener(task -> enableButton(button_updatePicture));
         });
 
