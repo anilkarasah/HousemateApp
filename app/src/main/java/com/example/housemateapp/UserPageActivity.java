@@ -30,9 +30,7 @@ public class UserPageActivity extends AppCompatActivity {
     TextView text_willStayForDays;
     TextView text_statusType;
 
-    Button button_email;
-    Button button_message;
-    Button button_whatsapp;
+    Button button_sendMatchRequest;
 
     private String emailAddress;
     private String phoneNumber;
@@ -65,9 +63,7 @@ public class UserPageActivity extends AppCompatActivity {
         text_rangeInKilometers = findViewById(R.id.textUserPageRangeInKilometers);
         text_willStayForDays = findViewById(R.id.textUserPageWillStayForDays);
         text_statusType = findViewById(R.id.textUserPageStatusType);
-        button_email = findViewById(R.id.buttonUserPageSendEmail);
-        button_message = findViewById(R.id.buttonUserPageSendMessage);
-        button_whatsapp = findViewById(R.id.buttonUserPageTextWithWhatsapp);
+        button_sendMatchRequest = findViewById(R.id.buttonUserPageSendMatchRequest);
 
         storage.getReference()
             .child(CameraUtils.getStorageChild(uid))
@@ -112,10 +108,7 @@ public class UserPageActivity extends AppCompatActivity {
                 phoneNumber = userMap.get(User.PHONE_NUMBER).toString();
             });
 
-        button_email.setOnClickListener(view -> Toast.makeText(this, emailAddress, Toast.LENGTH_SHORT).show());
-
-        button_message.setOnClickListener(view -> Toast.makeText(this, phoneNumber, Toast.LENGTH_SHORT).show());
-
-        button_whatsapp.setOnClickListener(view -> Toast.makeText(this, phoneNumber, Toast.LENGTH_SHORT).show());
+        // TODO ilk iş bunu yapmalıyım
+        button_sendMatchRequest.setOnClickListener(view -> Toast.makeText(this, "BURADAN EŞLEŞME İSTEĞİ GÖNDERİLECEK!", Toast.LENGTH_SHORT).show());
     }
 }

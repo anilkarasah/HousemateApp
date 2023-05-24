@@ -92,51 +92,17 @@
                 app:drawableStartCompat="@drawable/ic_search_black" />
 
             <Button
-                android:id="@+id/buttonUserPageSendEmail"
+                android:id="@+id/buttonUserPageSendMatchRequest"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/custom_button_send_email"
-                android:drawableStart="@drawable/ic_email_white"
+                android:drawableStart="@drawable/ic_add_person"
                 android:padding="16dp"
-                android:text="@string/button_send_email"
-                android:textColor="@color/white" />
-
-            <Button
-                android:id="@+id/buttonUserPageTextWithWhatsapp"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_button_send_whatsapp"
-                android:drawableStart="@drawable/ic_whatsapp_white"
-                android:padding="16dp"
-                android:text="@string/button_text_with_whatsapp"
-                android:textColor="@color/white" />
-
-            <Button
-                android:id="@+id/buttonUserPageSendMessage"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_button_send_sms"
-                android:drawableStart="@drawable/ic_sms_white"
-                android:padding="16dp"
-                android:text="@string/button_send_message"
+                android:text="@string/button_send_match_request"
                 android:textColor="@color/white" />
 
         </LinearLayout>
