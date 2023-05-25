@@ -9,14 +9,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class AuthUtils {
-    public static FirebaseUser getAuthenticatedUser(AppCompatActivity activity) {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = auth.getCurrentUser();
+    public static boolean redirectToLoginIfNotAuthenticated(AppCompatActivity activity, FirebaseAuth auth) {
+        FirebaseUser user = auth.getCurrentUser();
 
-        if (firebaseUser != null) return firebaseUser;
+        if (user == null) {
+            Intent loginIntent = new Intent(activity, LoginActivity.class);
+            activity.startActivity(loginIntent);
+            return false;
+        }
 
-        Intent loginIntent = new Intent(activity, LoginActivity.class);
-        activity.startActivity(loginIntent);
-        return null;
+        return true;
     }
 }

@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.housemateapp.utilities.ArrayListUtils;
+import com.example.housemateapp.utilities.AuthUtils;
 import com.example.housemateapp.utilities.CameraUtils;
 import com.example.housemateapp.utilities.UserAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.example.housemateapp.entities.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -63,14 +65,10 @@ public class MainPageActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
 
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        AuthUtils.redirectToLoginIfNotAuthenticated(this, mAuth);
 
-        if (firebaseUser == null) {
-            Toast.makeText(this, R.string.message_login_again, Toast.LENGTH_SHORT).show();
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-            return;
-        }
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        assert firebaseUser != null;
 
         if (!firebaseUser.isEmailVerified()) {
             Toast.makeText(this, R.string.message_verify_email_address, Toast.LENGTH_SHORT).show();

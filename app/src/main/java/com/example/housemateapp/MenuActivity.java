@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.housemateapp.utilities.AuthUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity {
@@ -18,6 +19,8 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        AuthUtils.redirectToLoginIfNotAuthenticated(this, FirebaseAuth.getInstance());
 
         text_profilePage = findViewById(R.id.textMenuProfile);
         text_mainPage = findViewById(R.id.textMenuMainPage);

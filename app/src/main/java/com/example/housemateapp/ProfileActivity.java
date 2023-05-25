@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.housemateapp.entities.User;
+import com.example.housemateapp.utilities.AuthUtils;
 import com.example.housemateapp.utilities.CameraUtils;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -78,7 +79,8 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
 
-        User.assertAuthentication(this);
+        AuthUtils.redirectToLoginIfNotAuthenticated(this, mAuth);
+
         firebaseUser = mAuth.getCurrentUser();
 
         image_menuButton = findViewById(R.id.imageMenuButton);

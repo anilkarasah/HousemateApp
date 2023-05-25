@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.housemateapp.entities.User;
+import com.example.housemateapp.utilities.AuthUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
@@ -29,6 +30,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+
+        if (AuthUtils.redirectToLoginIfNotAuthenticated(this, mAuth)) {
+            Intent mainPageIntent = new Intent(this, MainPageActivity.class);
+            startActivity(mainPageIntent);
+        }
 
         text_emailAddress = findViewById(R.id.textLoginEmailAddress);
         text_password = findViewById(R.id.textLoginPassword);

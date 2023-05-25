@@ -13,7 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.housemateapp.entities.User;
+import com.example.housemateapp.utilities.AuthUtils;
 import com.example.housemateapp.utilities.CameraUtils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -35,16 +37,16 @@ public class UserPageActivity extends AppCompatActivity {
     private String emailAddress;
     private String phoneNumber;
 
-    private FirebaseFirestore db;
-    private FirebaseStorage storage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_page);
 
-        db = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        AuthUtils.redirectToLoginIfNotAuthenticated(this, mAuth);
 
         Bundle bundle = getIntent().getExtras();
         String uid = bundle.getString(User.UID);
