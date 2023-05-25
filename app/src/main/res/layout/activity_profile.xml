@@ -508,31 +508,6 @@
                     android:textColor="@color/white" />
             </LinearLayout>
 
-            <View
-                android:id="@+id/divider6"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider" />
-
-            <Button
-                android:id="@+id/buttonLogout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/custom_button_secondary"
-                android:drawablePadding="8dp"
-                android:gravity="center"
-                android:paddingStart="48dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="48dp"
-                android:paddingBottom="8dp"
-                android:text="@string/button_logout"
-                android:textAllCaps="false"
-                android:textColor="@color/text"
-                android:textStyle="bold"
-                app:drawableStartCompat="@drawable/ic_logout_black" />
-
         </LinearLayout>
     </ScrollView>
 

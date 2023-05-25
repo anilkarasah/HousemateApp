@@ -63,9 +63,6 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
     EditText text_newPassword;
     Button button_updatePassword;
 
-    // log out section
-    Button button_logout;
-
     // Firebase utilities
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -102,24 +99,11 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
         text_currentPassword = findViewById(R.id.textProfileCurrentPassword);
         text_newPassword = findViewById(R.id.textProfileNewPassword);
         button_updatePassword = findViewById(R.id.buttonUpdatePassword);
-        button_logout = findViewById(R.id.buttonLogout);
 
         image_menuButton.setVisibility(View.VISIBLE);
         image_menuButton.setOnClickListener(view -> {
             Intent menuIntent = new Intent(this, MenuActivity.class);
             startActivity(menuIntent);
-        });
-
-        // LOG OUT SECTION
-        button_logout.setOnClickListener(view -> {
-            disableButton(button_logout);
-
-            mAuth.signOut();
-
-            Toast.makeText(this, R.string.message_signed_out, Toast.LENGTH_SHORT).show();
-
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
         });
 
         // POPULATE USER DATA
