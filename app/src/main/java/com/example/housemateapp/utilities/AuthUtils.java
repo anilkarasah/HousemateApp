@@ -9,15 +9,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class AuthUtils {
-    public static boolean redirectToLoginIfNotAuthenticated(AppCompatActivity activity, FirebaseAuth auth) {
+    public static void redirectToLoginIfNotAuthenticated(AppCompatActivity activity, FirebaseAuth auth) {
         FirebaseUser user = auth.getCurrentUser();
 
         if (user == null) {
             Intent loginIntent = new Intent(activity, LoginActivity.class);
             activity.startActivity(loginIntent);
-            return false;
         }
-
-        return true;
     }
 }
