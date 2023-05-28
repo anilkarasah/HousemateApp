@@ -1,6 +1,7 @@
 package com.example.housemateapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,6 +135,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
 
+        googleMap.setOnMarkerClickListener(marker -> {
+            for (User user : users) {
+                if (user.fullName.equalsIgnoreCase(marker.getTitle())) {
+                    showUserDetailsLayout(user);
+                }
+            }
+
+            return false;
+        });
+
         updateUserMarkers();
     }
 
@@ -179,12 +192,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             if (uid.equals(user.uid)) {
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
-                String userName = String.format("%s (siz)", user.fullName);
-                markerOptions.title(userName);
                 userMarker = googleMap.addMarker(markerOptions);
             } else {
                 googleMap.addMarker(markerOptions);
             }
         }
+    }
+
+    private void showUserDetailsLayout(User user) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle(user.fullName + " bilgileri:")
+            .setMessage(String.format(Locale.GERMAN, "Aranan uzaklık: %.1f km\nKalınacak gün sayısı: %d\n%s",
+                user.rangeInKilometers, user.willStayForDays, user.statusType))
+            .setPositiveButton("Görüntüle", (dialogInterface, i) -> {
+                Intent userPageIntent = new Intent(getActivity(), UserPageActivity.class);
+                userPageIntent.putExtra(User.UID, user.uid);
+                startActivity(userPageIntent);
+            })
+            .setNegativeButton("Kapat", (dialogInterface, i) -> dialogInterface.dismiss())
+            .show();
     }
 }
