@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -118,37 +120,26 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
                 startActivity(loginIntent);
             })
             .addOnSuccessListener(documentSnapshot -> {
-                Map<String, Object> userMap = documentSnapshot.getData();
+                User user = User.parseDocumentSnapshot(documentSnapshot);
 
-                assert userMap != null;
-                text_emailAddress.setText(userMap.get(User.EMAIL_ADDRESS).toString());
-                text_fullName.setText(userMap.get(User.FULL_NAME).toString());
-                text_phoneNumber.setText(userMap.get(User.PHONE_NUMBER).toString());
-                text_department.setText(userMap.get(User.DEPARTMENT).toString());
-                text_grade.setText(userMap.get(User.GRADE).toString());
+                text_emailAddress.setText(user.emailAddress);
+                text_fullName.setText(user.fullName);
+                text_phoneNumber.setText(user.phoneNumber);
+                text_department.setText(user.department);
+                text_grade.setText(String.format(Locale.GERMAN, "%d", user.grade));
 
-                Object rangeInKilometers = userMap.get(User.RANGE_IN_KILOMETERS);
-                if (rangeInKilometers != null && !TextUtils.isEmpty(rangeInKilometers.toString())) {
-                    text_rangeInKilometers.setText(rangeInKilometers.toString());
-                }
+                text_rangeInKilometers.setText(String.format(Locale.GERMAN, "%.2f", user.rangeInKilometers));
+                text_willStayForDays.setText(String.format(Locale.GERMAN, "%d", user.willStayForDays));
 
-                Object willStayForDays = userMap.get(User.WILL_STAY_FOR_DAYS);
-                if (willStayForDays != null && !TextUtils.isEmpty(willStayForDays.toString())) {
-                    text_willStayForDays.setText(willStayForDays.toString());
-                }
+                int i = 0;
+                String[] statusTypes = getResources().getStringArray(R.array.status_types);
+                while (i < statusTypes.length && !statusTypes[i].equalsIgnoreCase(user.statusType))
+                    i++;
 
-                Object statusType = userMap.get(User.STATUS_TYPE);
-                if (statusType != null) {
-                    int i = 0;
-                    String[] statusTypes = getResources().getStringArray(R.array.status_types);
-                    while (i < statusTypes.length && !statusType.toString().equalsIgnoreCase(statusTypes[i]))
-                        i++;
-
-                    if (i < statusTypes.length) {
-                        spinner_statusType.setSelection(i);
-                    } else {
-                        spinner_statusType.setSelection(0);
-                    }
+                if (i < statusTypes.length) {
+                    spinner_statusType.setSelection(i);
+                } else {
+                    spinner_statusType.setSelection(0);
                 }
             });
 

@@ -115,11 +115,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         db.collection(User.COLLECTION_NAME)
             .document(uid)
-            .update(locationMap)
-            .addOnFailureListener(e -> Log.e("MapsFragment", "Error while updating location data", e))
-            .addOnSuccessListener(unused -> Log.i("MapsFragment", String.format(Locale.GERMAN,
-                "Successfully updated. Lat: %f, Lon: %f",
-                currentLocation.getLatitude(), currentLocation.getLongitude())));
+            .update(locationMap);
     }
 
     @Override
@@ -204,7 +200,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             .setMessage(String.format(Locale.GERMAN, "Aranan uzaklık: %.1f km\nKalınacak gün sayısı: %d\n%s",
                 user.rangeInKilometers, user.willStayForDays, user.statusType))
             .setPositiveButton("Görüntüle", (dialogInterface, i) -> {
-                Intent userPageIntent = new Intent(getActivity(), UserPageActivity.class);
+                Intent userPageIntent = new Intent(activity, UserPageActivity.class);
                 userPageIntent.putExtra(User.UID, user.uid);
                 startActivity(userPageIntent);
             })

@@ -17,6 +17,9 @@
     <string name="prompt_sort_by">Sırala</string>
     <string name="prompt_list_view">Liste Görünümü</string>
     <string name="prompt_map_view">Harita Görünümü</string>
+    <string name="prompt_request_waiting">Yanıtınız Bekleniyor</string>
+    <string name="prompt_request_sent">İstek Gönderildi</string>
+    <string name="prompt_request_done">Sonuçlandı</string>
 
     <string name="button_login">Giriş Yap</string>
     <string name="button_signup">Kayıt Ol</string>
@@ -35,6 +38,7 @@
     <string name="button_send_message">Mesaj Gönder</string>
     <string name="button_text_with_whatsapp">Whatsapp ile Ulaş</string>
     <string name="button_apply_filter">Uygula</string>
+    <string name="button_accept_match_request">Eşleşmeyi Kabul Et</string>
 
     <string name="description_profile_picture">Profil Fotoğrafı</string>
     <string name="description_menu">Menü</string>
@@ -49,14 +53,13 @@
     <string name="description_new_password">Yeni Parolanız</string>
     <string name="description_sort_by">Sıralama Türü</string>
 
-    <string name="title_signup_page">Kayıt Olun</string>
     <string name="title_profile_page">Profil</string>
     <string name="title_main_page">Ana Sayfa</string>
     <string name="title_section_profile_picture">Profil Fotoğrafınız</string>
     <string name="title_section_profile_information">Bilgileriniz</string>
     <string name="title_section_email_address">Email Adresiniz</string>
     <string name="title_section_password">Parolanız</string>
-    <string name="title_map_page">Harita Görünümü</string>
+    <string name="title_requests_page">İstekler</string>
 
     <string name="message_permission_camera_required">Bu işlem için kamera izni gereklidir.</string>
     <string name="message_permission_gallery_required">Bu işlem için galeriye erişim izni gereklidir.</string>
@@ -70,6 +73,7 @@
     <string name="message_verify_email_address">Lütfen email adresinizi doğrulayın.</string>
     <string name="message_login_again">Lütfen tekrar giriş yapınız.</string>
     <string name="message_filter_not_active">Filtreleme işlemi şuan desteklenmiyor.</string>
+    <string name="message_only_users_looking_for_send_request">Sadece "kalacak ev/oda arayan kullanıcılar" ile "ev/oda arkadaşı arayan kullanıcılar" birbirine eşleşme isteği gönderebilir. Profilden durumunuzu değiştirebilirsiniz.</string>
 
     <string name="display_grade">%1$d. Sınıf</string>
     <string name="display_range_in_kilometers">%1$.1f km</string>
@@ -93,5 +97,4 @@
         <item>Konaklama Süresi (Artan)</item>
         <item>Konaklama Süresi (Azalan)</item>
     </string-array>
-    <string name="title_activity_maps">MapsActivity</string>
 </resources>

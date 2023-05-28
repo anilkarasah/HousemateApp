@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".UserPageActivity">
+    tools:context=".RequestActivity">
 
     <include layout="@layout/layout_header" />
 
@@ -26,7 +26,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/imageUserPageProfilePicture"
+                    android:id="@+id/imageRequestProfilePicture"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_marginEnd="12dp"
@@ -36,7 +36,7 @@
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
-                    android:id="@+id/textUserPageFullName"
+                    android:id="@+id/textRequestFullName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -47,7 +47,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textUserPageDepartment"
+                android:id="@+id/textRequestDepartment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
@@ -56,7 +56,7 @@
                 app:drawableStartCompat="@drawable/ic_building_black" />
 
             <TextView
-                android:id="@+id/textUserPageGrade"
+                android:id="@+id/textRequestGrade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
@@ -65,7 +65,7 @@
                 app:drawableStartCompat="@drawable/ic_grade_black" />
 
             <TextView
-                android:id="@+id/textUserPageRangeInKilometers"
+                android:id="@+id/textRequestRangeInKilometers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
@@ -74,7 +74,7 @@
                 app:drawableStartCompat="@drawable/ic_distance_black" />
 
             <TextView
-                android:id="@+id/textUserPageWillStayForDays"
+                android:id="@+id/textRequestWillStayForDays"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
@@ -83,7 +83,7 @@
                 app:drawableStartCompat="@drawable/ic_calendar_black" />
 
             <TextView
-                android:id="@+id/textUserPageStatusType"
+                android:id="@+id/textRequestStatusType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
@@ -92,28 +92,67 @@
                 app:drawableStartCompat="@drawable/ic_search_black" />
 
             <Button
-                android:id="@+id/buttonUserPageSendMatchRequest"
+                android:id="@+id/buttonRequestAccept"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="24dp"
                 android:layout_weight="1"
-                android:background="@drawable/custom_button_inactive"
+                android:background="@drawable/custom_button"
                 android:drawableStart="@drawable/ic_add_person"
                 android:enabled="false"
                 android:padding="16dp"
-                android:text="@string/button_send_match_request"
+                android:text="@string/button_accept_match_request"
                 android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/textViewSendRequestPrompt"
+            <Button
+                android:id="@+id/buttonRequestWhatsapp"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawablePadding="24dp"
-                android:padding="12dp"
-                android:text="@string/message_only_users_looking_for_send_request"
-                app:drawableStartCompat="@drawable/ic_warning" />
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button_send_whatsapp"
+                android:drawableStart="@drawable/ic_whatsapp_white"
+                android:enabled="false"
+                android:padding="16dp"
+                android:text="@string/button_text_with_whatsapp"
+                android:textColor="@color/white"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/buttonRequestMessage"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button_send_sms"
+                android:drawableStart="@drawable/ic_sms_white"
+                android:enabled="false"
+                android:padding="16dp"
+                android:text="@string/button_send_message"
+                android:textColor="@color/white"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/buttonRequestEmail"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button_send_email"
+                android:drawableStart="@drawable/ic_email_white"
+                android:enabled="false"
+                android:padding="16dp"
+                android:text="@string/button_send_email"
+                android:textColor="@color/white"
+                android:visibility="invisible" />
 
         </LinearLayout>
     </ScrollView>

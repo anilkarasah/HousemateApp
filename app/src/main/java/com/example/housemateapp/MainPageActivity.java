@@ -54,16 +54,13 @@ public class MainPageActivity extends AppCompatActivity {
     private UsersListFragment usersListFragment;
     private MapsFragment mapsFragment;
 
-    private LocationService locationService;
-    private Location currentLocation;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        viewPager = findViewById(R.id.viewPager);
-        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.usersListViewPager);
+        tabLayout = findViewById(R.id.usersListTabLayout);
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -145,54 +142,15 @@ public class MainPageActivity extends AppCompatActivity {
             .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show())
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    Map<String, Object> userMap = documentSnapshot.getData();
+                    User user = User.parseDocumentSnapshot(documentSnapshot);
 
-                    String uid = userMap.get(User.UID).toString();
-                    String fullName = userMap.get(User.FULL_NAME).toString();
-                    String emailAddress = userMap.get(User.EMAIL_ADDRESS).toString();
-                    String phoneNumber = userMap.get(User.PHONE_NUMBER).toString();
-                    String department = userMap.get(User.DEPARTMENT).toString();
-                    int grade = Integer.parseInt(userMap.get(User.GRADE).toString());
-
-                    double rangeInKilometers = 0;
-                    Object rangeInKilometersObject = userMap.get(User.RANGE_IN_KILOMETERS);
-                    if (rangeInKilometersObject != null) {
-                        rangeInKilometers = Double.parseDouble(rangeInKilometersObject.toString());
-                    }
-
-                    int willStayForDays = 0;
-                    Object willStayForDaysObject = userMap.get(User.WILL_STAY_FOR_DAYS);
-                    if (willStayForDaysObject != null) {
-                        willStayForDays = Integer.parseInt(willStayForDaysObject.toString());
-                    }
-
-                    String statusType = "Belirtilmemiş";
-                    Object statusTypeObject = userMap.get(User.STATUS_TYPE);
-                    if (statusTypeObject != null) {
-                        statusType = statusTypeObject.toString();
-                    }
-
-                    double latitude = 0f;
-                    Object latitudeObject = userMap.get(User.LATITUDE);
-                    if (latitudeObject != null) {
-                        latitude = Double.parseDouble(latitudeObject.toString());
-                    }
-
-                    double longitude = 0f;
-                    Object longitudeObject = userMap.get(User.LONGITUDE);
-                    if (longitudeObject != null) {
-                        longitude = Double.parseDouble(longitudeObject.toString());
-                    }
-
-                    User user = new User(fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays, statusType, latitude, longitude);
-                    user.uid = uid;
                     users.add(user);
                     usersListFragment.notifyUserAdapter(users.indexOf(user));
 
                     storage.getReference()
-                        .child(CameraUtils.getStorageChild(uid))
+                        .child(CameraUtils.getStorageChild(user.uid))
                         .getBytes(CameraUtils.TWO_MEGABYTES)
-                        .addOnFailureListener(e -> Log.i("MainPageActivity/Storage", "Error retrieving profile picture of user with ID: " + uid))
+                        .addOnFailureListener(e -> Log.i("MainPageActivity/Storage", "Error retrieving profile picture of user with ID: " + user.uid))
                         .addOnSuccessListener(bytes -> {
                             user.profilePicture = CameraUtils.getBitmap(bytes);
                             usersListFragment.notifyUserAdapter(users.indexOf(user));

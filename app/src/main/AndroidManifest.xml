@@ -26,6 +26,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HousemateApp"
         tools:targetApi="31">
+        <activity
+            android:name=".RequestsPageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestActivity"
+            android:exported="false" />
 
         <service
             android:name=".LocationService"

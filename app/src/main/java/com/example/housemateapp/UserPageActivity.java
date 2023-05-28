@@ -1,24 +1,30 @@
 package com.example.housemateapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.housemateapp.entities.MatchingRequest;
 import com.example.housemateapp.entities.User;
 import com.example.housemateapp.utilities.AuthUtils;
 import com.example.housemateapp.utilities.CameraUtils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class UserPageActivity extends AppCompatActivity {
@@ -32,10 +38,12 @@ public class UserPageActivity extends AppCompatActivity {
     TextView text_willStayForDays;
     TextView text_statusType;
 
+    TextView text_sendRequestPrompt;
+
     Button button_sendMatchRequest;
 
-    private String emailAddress;
-    private String phoneNumber;
+    private String fromUid;
+    private String toUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +57,7 @@ public class UserPageActivity extends AppCompatActivity {
         AuthUtils.redirectToLoginIfNotAuthenticated(this, mAuth);
 
         Bundle bundle = getIntent().getExtras();
-        String uid = bundle.getString(User.UID);
+        toUid = bundle.getString(User.UID);
 
         image_menuButton = findViewById(R.id.imageMenuButton);
         image_menuButton.setVisibility(View.VISIBLE);
@@ -66,9 +74,10 @@ public class UserPageActivity extends AppCompatActivity {
         text_willStayForDays = findViewById(R.id.textUserPageWillStayForDays);
         text_statusType = findViewById(R.id.textUserPageStatusType);
         button_sendMatchRequest = findViewById(R.id.buttonUserPageSendMatchRequest);
+        text_sendRequestPrompt = findViewById(R.id.textViewSendRequestPrompt);
 
         storage.getReference()
-            .child(CameraUtils.getStorageChild(uid))
+            .child(CameraUtils.getStorageChild(toUid))
             .getBytes(CameraUtils.TWO_MEGABYTES)
             .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show())
             .addOnSuccessListener(bytes -> {
@@ -77,7 +86,7 @@ public class UserPageActivity extends AppCompatActivity {
             });
 
         db.collection(User.COLLECTION_NAME)
-            .document(uid)
+            .document(toUid)
             .get()
             .addOnFailureListener(e -> {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -85,32 +94,56 @@ public class UserPageActivity extends AppCompatActivity {
                 startActivity(mainPageIntent);
             })
             .addOnSuccessListener(documentSnapshot -> {
-                Map<String, Object> userMap = documentSnapshot.getData();
+                User user = User.parseDocumentSnapshot(documentSnapshot);
 
-                assert userMap != null;
-                text_fullName.setText(userMap.get(User.FULL_NAME).toString());
-                text_department.setText(userMap.get(User.DEPARTMENT).toString());
-                text_statusType.setText(userMap.get(User.STATUS_TYPE).toString());
+                text_fullName.setText(user.fullName);
+                text_department.setText(user.department);
+                text_statusType.setText(user.statusType);
 
                 Resources resources = getResources();
 
-                int grade = Integer.parseInt(userMap.get(User.GRADE).toString());
-                String gradeString = resources.getString(R.string.display_grade, grade);
+                String gradeString = resources.getString(R.string.display_grade, user.grade);
                 text_grade.setText(gradeString);
 
-                double rangeInKilometers = Double.parseDouble(userMap.get(User.RANGE_IN_KILOMETERS).toString());
-                String rangeInKilometersString = resources.getString(R.string.display_range_in_kilometers, rangeInKilometers);
+                String rangeInKilometersString = resources.getString(R.string.display_range_in_kilometers, user.rangeInKilometers);
                 text_rangeInKilometers.setText(rangeInKilometersString);
 
-                int willStayForDays = Integer.parseInt(userMap.get(User.WILL_STAY_FOR_DAYS).toString());
-                String willStayForDaysString = resources.getString(R.string.display_will_stay_for_days, willStayForDays);
+                String willStayForDaysString = resources.getString(R.string.display_will_stay_for_days, user.willStayForDays);
                 text_willStayForDays.setText(willStayForDaysString);
 
-                emailAddress = userMap.get(User.EMAIL_ADDRESS).toString();
-                phoneNumber = userMap.get(User.PHONE_NUMBER).toString();
+                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                assert firebaseUser != null;
+                fromUid = firebaseUser.getUid();
+                db.collection(User.COLLECTION_NAME)
+                    .document(fromUid)
+                    .get()
+                    .addOnSuccessListener(snapshot -> {
+                        String statusType = snapshot.get(User.STATUS_TYPE).toString();
+
+                        if (isEligibleForMatchingRequest(statusType, user.statusType) || isEligibleForMatchingRequest(user.statusType, statusType)) {
+                            Drawable button = AppCompatResources.getDrawable(this, R.drawable.custom_button_send_email);
+                            button_sendMatchRequest.setBackground(button);
+                            button_sendMatchRequest.setEnabled(true);
+                            text_sendRequestPrompt.setVisibility(View.INVISIBLE);
+                        }
+                    });
             });
 
-        // TODO ilk iş bunu yapmalıyım
-        button_sendMatchRequest.setOnClickListener(view -> Toast.makeText(this, "BURADAN EŞLEŞME İSTEĞİ GÖNDERİLECEK!", Toast.LENGTH_SHORT).show());
+        button_sendMatchRequest.setOnClickListener(view -> {
+            MatchingRequest matchingRequest = new MatchingRequest(fromUid, toUid, false, false);
+
+            db.collection(MatchingRequest.COLLECTION_NAME)
+                .add(matchingRequest)
+                .addOnFailureListener(e -> Log.e("UserPageActivity", "onCreate: Could not create Matching Request object", e))
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "İstek gönderildi.", Toast.LENGTH_SHORT).show();
+                    Intent mainPageIntent = new Intent(this, MainPageActivity.class);
+                    startActivity(mainPageIntent);
+                });
+        });
+    }
+
+    private boolean isEligibleForMatchingRequest(String firstUserStatusType, String secondUserStatusType) {
+        return firstUserStatusType.equalsIgnoreCase("Kalacak Ev/Oda Arıyor") && secondUserStatusType.equalsIgnoreCase("Ev/Oda Arkadaşı Arıyor");
     }
 }

@@ -3,6 +3,7 @@ package com.example.housemateapp.entities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.housemateapp.LoginActivity;
 import com.example.housemateapp.utilities.ValidationException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.Map;
 
 public class User {
     public static final String COLLECTION_NAME = "users";
@@ -60,6 +64,53 @@ public class User {
 
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public static User parseDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+        Map<String, Object> userMap = documentSnapshot.getData();
+
+        assert userMap != null;
+        String uid = userMap.get(User.UID).toString();
+        String fullName = userMap.get(User.FULL_NAME).toString();
+        String emailAddress = userMap.get(User.EMAIL_ADDRESS).toString();
+        String phoneNumber = userMap.get(User.PHONE_NUMBER).toString();
+        String department = userMap.get(User.DEPARTMENT).toString();
+        int grade = Integer.parseInt(userMap.get(User.GRADE).toString());
+
+        double rangeInKilometers = 0f;
+        Object rangeInKilometersObject = userMap.get(User.RANGE_IN_KILOMETERS);
+        if (rangeInKilometersObject != null) {
+            rangeInKilometers = Double.parseDouble(rangeInKilometersObject.toString());
+        }
+
+        int willStayForDays = 0;
+        Object willStayForDaysObject = userMap.get(User.WILL_STAY_FOR_DAYS);
+        if (willStayForDaysObject != null) {
+            willStayForDays = Integer.parseInt(willStayForDaysObject.toString());
+        }
+
+        String statusType = "Hepsi";
+        Object statusTypeObject = userMap.get(User.STATUS_TYPE);
+        if (statusTypeObject != null) {
+            statusType = statusTypeObject.toString();
+        }
+
+        double latitude = 0f;
+        Object latitudeObject = userMap.get(User.LATITUDE);
+        if (latitudeObject != null) {
+            latitude = Double.parseDouble(latitudeObject.toString());
+        }
+
+        double longitude = 0f;
+        Object longitudeObject = userMap.get(User.LONGITUDE);
+        if (longitudeObject != null) {
+            longitude = Double.parseDouble(longitudeObject.toString());
+        }
+
+        User user = new User(fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays, statusType, latitude, longitude);
+        user.uid = uid;
+
+        return user;
     }
 
     public static void validateEmail(String emailAddress) throws ValidationException {
