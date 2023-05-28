@@ -26,9 +26,9 @@ public class ArrayListUtils {
         Comparator<User> comparator;
 
         if (sortBy.equalsIgnoreCase("Kampüse Uzaklık (Artan)")) {
-            comparator = (user1, user2) -> (int) (user1.rangeInKilometers - user2.rangeInKilometers);
+            comparator = (user1, user2) -> (int) ((user1.rangeInKilometers - user2.rangeInKilometers) * 10);
         } else if (sortBy.equalsIgnoreCase("Kampüse Uzaklık (Azalan)")) {
-            comparator = (user1, user2) -> (int) (user2.rangeInKilometers - user1.rangeInKilometers);
+            comparator = (user1, user2) -> (int) ((user2.rangeInKilometers - user1.rangeInKilometers) * 10);
         } else if (sortBy.equalsIgnoreCase("Konaklama Süresi (Artan)")) {
             comparator = (user1, user2) -> user1.willStayForDays - user2.willStayForDays;
         } else if (sortBy.equalsIgnoreCase("Konaklama Süresi (Azalan)")) {

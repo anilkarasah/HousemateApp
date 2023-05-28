@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        if (AuthUtils.redirectToLoginIfNotAuthenticated(this, mAuth)) {
+        if (mAuth.getCurrentUser() != null) {
             Intent mainPageIntent = new Intent(this, MainPageActivity.class);
             startActivity(mainPageIntent);
         }

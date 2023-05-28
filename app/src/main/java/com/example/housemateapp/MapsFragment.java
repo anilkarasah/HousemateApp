@@ -153,9 +153,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 userMarker.setPosition(latLng);
             };
-
-            Location location = locationService.getCurrentLocation();
-            if (location != null) currentLocation = location;
         }
 
         @Override
@@ -182,6 +179,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             if (uid.equals(user.uid)) {
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+                String userName = String.format("%s (siz)", user.fullName);
+                markerOptions.title(userName);
                 userMarker = googleMap.addMarker(markerOptions);
             } else {
                 googleMap.addMarker(markerOptions);

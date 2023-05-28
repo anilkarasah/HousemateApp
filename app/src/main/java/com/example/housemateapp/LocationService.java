@@ -69,11 +69,8 @@ public class LocationService extends Service {
 
                 for (Location location : locationResult.getLocations()) {
                     if (location == null) continue;
-
-                    onLocationChangeListener.act(location);
-
                     currentLocation = location;
-                    Toast.makeText(LocationService.this, "New location received: " + location.getLatitude() + " " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+                    onLocationChangeListener.act(location);
                 }
             }
         };
@@ -105,10 +102,6 @@ public class LocationService extends Service {
         public LocationService getService() {
             return LocationService.this;
         }
-    }
-
-    public Location getCurrentLocation() {
-        return currentLocation;
     }
 
     public interface OnLocationChangeListener {
