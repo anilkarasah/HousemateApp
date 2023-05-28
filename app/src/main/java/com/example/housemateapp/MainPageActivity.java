@@ -127,6 +127,11 @@ public class MainPageActivity extends AppCompatActivity {
 
         layout_filterSettings.setOnClickListener(view -> {
             Intent filterIntent = new Intent(MainPageActivity.this, UserFilterActivity.class);
+            filterIntent.putExtra(User.RANGE_IN_KILOMETERS, filterSelectedRange);
+            filterIntent.putExtra(User.WILL_STAY_FOR_DAYS, filterSelectedDays);
+            filterIntent.putExtra(User.STATUS_TYPE, filterSelectedStatusType);
+            filterIntent.putExtra("sortType", filterSortBy);
+
             if (getPackageManager().resolveActivity(filterIntent, 0) != null) {
                 getFilterSettingsActivityResultLauncher.launch(filterIntent);
             } else {

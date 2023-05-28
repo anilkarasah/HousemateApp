@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +28,9 @@ public class UserFilterActivity extends AppCompatActivity {
     Spinner spinner_statusType;
     Spinner spinner_sortBy;
 
+    String[] statusTypes;
+    String[] sortByTypes;
+
     private double selectedRange = 0f;
     private int selectedDays = 0;
     private int selectedStatusTypeIndex = 0;
@@ -43,13 +47,10 @@ public class UserFilterActivity extends AppCompatActivity {
         text_daysValue = findViewById(R.id.textUserFilterStayValue);
         spinner_statusType = findViewById(R.id.spinnerFilterStatusType);
         spinner_sortBy = findViewById(R.id.spinnerSortingType);
-        String[] statusTypes = getResources().getStringArray(R.array.status_types);
-        String[] sortByTypes = getResources().getStringArray(R.array.sort_users_by);
 
         Resources resources = getResources();
-
-        text_rangeValue.setText(resources.getString(R.string.display_range_in_kilometers, 0f));
-        text_daysValue.setText(resources.getString(R.string.display_will_stay_for_days, 0));
+        statusTypes = resources.getStringArray(R.array.status_types);
+        sortByTypes = resources.getStringArray(R.array.sort_users_by);
 
         seekBar_range.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -122,5 +123,55 @@ public class UserFilterActivity extends AppCompatActivity {
                 selectedSortTypeIndex = 0;
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Bundle previousSelectionsBundle = getIntent().getExtras();
+        updateFieldsFromBundle(previousSelectionsBundle);
+    }
+
+    private void updateFieldsFromBundle(Bundle bundle) {
+        Resources resources = getResources();
+
+        // update "Range in Kilometers" seek-bar
+        selectedRange = bundle.getDouble(User.RANGE_IN_KILOMETERS, 0f);
+        text_rangeValue.setText(resources.getString(R.string.display_range_in_kilometers, selectedRange));
+        seekBar_range.setProgress((int) (selectedRange * 10));
+
+        // update "Will Stay for Days" seek-bar
+        selectedDays = bundle.getInt(User.WILL_STAY_FOR_DAYS, 0);
+        text_daysValue.setText(resources.getString(R.string.display_will_stay_for_days, selectedDays));
+        seekBar_days.setProgress(selectedDays);
+
+        // update "Status Type" spinner
+        String statusType = bundle.getString(User.STATUS_TYPE, "");
+        if (!TextUtils.isEmpty(statusType)) {
+            int statusTypeIndex = 0;
+            while (statusTypeIndex < statusTypes.length &&
+                !statusTypes[statusTypeIndex].equalsIgnoreCase(statusType)) {
+                statusTypeIndex++;
+            }
+
+            if (statusTypeIndex < statusTypes.length) {
+                spinner_statusType.setSelection(statusTypeIndex);
+            }
+        }
+
+        // update "Sort By" spinner
+        String sortByType = bundle.getString("sortType", "");
+        if (!TextUtils.isEmpty(sortByType)) {
+            int sortTypeIndex = 0;
+            while (sortTypeIndex < sortByTypes.length &&
+                !sortByTypes[sortTypeIndex].equalsIgnoreCase(sortByType)) {
+                sortTypeIndex++;
+            }
+
+            if (sortTypeIndex < sortByTypes.length) {
+                spinner_sortBy.setSelection(sortTypeIndex);
+            }
+        }
     }
 }

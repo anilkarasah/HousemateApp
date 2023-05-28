@@ -78,6 +78,7 @@
     <string name="filter_users_by_status">Ev/Oda Arama Durumu</string>
 
     <string-array name="status_types">
+        <item>Hepsi</item>
         <item>Aramıyor</item>
         <item>Kalacak Ev/Oda Arıyor</item>
         <item>Ev/Oda Arkadaşı Arıyor</item>

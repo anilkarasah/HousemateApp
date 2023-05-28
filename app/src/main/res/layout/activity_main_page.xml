@@ -13,6 +13,7 @@
         android:id="@+id/layoutFilterSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/secondary"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -23,8 +24,9 @@
             android:padding="12dp"
             android:text="@string/prompt_filter_settings"
             android:textAlignment="center"
+            android:textColor="@color/text"
             android:textStyle="bold"
-            app:drawableStartCompat="@drawable/ic_filter" />
+            app:drawableStartCompat="@drawable/ic_filter_black" />
 
     </LinearLayout>
 
