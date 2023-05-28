@@ -15,6 +15,8 @@
     <string name="prompt_filter_settings">Filtreleme Seçenekleri</string>
     <string name="prompt_filter_by">Filtrele</string>
     <string name="prompt_sort_by">Sırala</string>
+    <string name="prompt_list_view">Liste Görünümü</string>
+    <string name="prompt_map_view">Harita Görünümü</string>
 
     <string name="button_login">Giriş Yap</string>
     <string name="button_signup">Kayıt Ol</string>

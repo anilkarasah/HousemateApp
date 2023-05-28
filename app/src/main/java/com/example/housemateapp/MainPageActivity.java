@@ -6,11 +6,16 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +36,8 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,26 +53,46 @@ import java.util.Map;
 
 public class MainPageActivity extends AppCompatActivity {
     ImageView image_menuButton;
-
     LinearLayout layout_filterSettings;
+    ViewPager2 viewPager;
+    TabLayout tabLayout;
 
     double filterSelectedRange = 0f;
     int filterSelectedDays = 0;
     String filterSelectedStatusType = "";
     String filterSortBy = "";
 
-    RecyclerView view_users;
-
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseStorage storage;
 
-    private final ArrayList<User> users = new ArrayList<>();
+    public final ArrayList<User> users = new ArrayList<>();
+
+    private UsersListFragment usersListFragment;
+    private MapsFragment mapsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+
+        viewPager = findViewById(R.id.viewPager);
+        tabLayout = findViewById(R.id.tabLayout);
+
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this);
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setUserInputEnabled(false);
+
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText(R.string.prompt_list_view);
+                    break;
+                case 1:
+                    tab.setText(R.string.prompt_map_view);
+                    break;
+            }
+        }).attach();
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -81,19 +108,11 @@ public class MainPageActivity extends AppCompatActivity {
             firebaseUser.sendEmailVerification();
         }
 
+        usersListFragment = new UsersListFragment(users);
+        mapsFragment = new MapsFragment();
+
         Intent locationServiceIntent = new Intent(this, LocationService.class);
         startService(locationServiceIntent);
-
-        view_users = findViewById(R.id.mainPageUsersView);
-        UserAdapter userAdapter = new UserAdapter(users, this, user -> {
-            Intent userPageIntent = new Intent(MainPageActivity.this, UserPageActivity.class);
-            userPageIntent.putExtra(User.UID, user.uid);
-            startActivity(userPageIntent);
-        });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        view_users.setAdapter(userAdapter);
-        view_users.setItemAnimator(new DefaultItemAnimator());
-        view_users.setLayoutManager(linearLayoutManager);
 
         layout_filterSettings = findViewById(R.id.layoutFilterSettings);
 
@@ -113,17 +132,8 @@ public class MainPageActivity extends AppCompatActivity {
                 ArrayList<User> filteredUsers = ArrayListUtils.filterUsers(users, filterSelectedRange, filterSelectedDays, filterSelectedStatusType);
                 ArrayListUtils.sortUsersBy(filteredUsers, filterSortBy);
 
-                userAdapter.setUsers(filteredUsers);
-                userAdapter.notifyDataSetChanged();
+                usersListFragment.notifyUserAdapter(filteredUsers);
             });
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        SettingsClient client = LocationServices.getSettingsClient(this);
-        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-
-        task.addOnSuccessListener(locationSettingsResponse -> {
-
-        });
 
         layout_filterSettings.setOnClickListener(view -> {
             Intent filterIntent = new Intent(MainPageActivity.this, UserFilterActivity.class);
@@ -137,6 +147,14 @@ public class MainPageActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.message_filter_not_active, Toast.LENGTH_SHORT).show();
             }
+        });
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(locationSettingsResponse -> {
+
         });
 
         image_menuButton = findViewById(R.id.imageMenuButton);
@@ -181,7 +199,7 @@ public class MainPageActivity extends AppCompatActivity {
                     User user = new User(fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays, statusType);
                     user.uid = uid;
                     users.add(user);
-                    userAdapter.notifyItemChanged(users.indexOf(user));
+                    usersListFragment.notifyUserAdapter(users.indexOf(user));
 
                     storage.getReference()
                         .child(CameraUtils.getStorageChild(uid))
@@ -189,7 +207,7 @@ public class MainPageActivity extends AppCompatActivity {
                         .addOnFailureListener(e -> Log.i("MainPageActivity/Storage", "Error retrieving profile picture of user with ID: " + uid))
                         .addOnSuccessListener(bytes -> {
                             user.profilePicture = CameraUtils.getBitmap(bytes);
-                            userAdapter.notifyItemChanged(users.indexOf(user));
+                            usersListFragment.notifyUserAdapter(users.indexOf(user));
                         });
                 }
             });
@@ -206,6 +224,30 @@ public class MainPageActivity extends AppCompatActivity {
             filterSortBy = data.getStringExtra("sortType");
 
 //            updateRecyclerView();
+        }
+    }
+
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
+        public SectionsPagerAdapter(FragmentActivity fragmentActivity) {
+            super(fragmentActivity);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch (position) {
+                case 0:
+                    return usersListFragment;
+                case 1:
+                    return mapsFragment;
+            }
+
+            return new Fragment();
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
         }
     }
 }

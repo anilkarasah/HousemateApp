@@ -13,7 +13,8 @@ public class ArrayListUtils {
         for (User user : list) {
             if (range != 0 && user.rangeInKilometers >= range) continue;
             if (days != 0 && user.willStayForDays >= days) continue;
-            if (!user.statusType.equalsIgnoreCase(statusType)) continue;
+            if (!statusType.equalsIgnoreCase("Hepsi") &&
+                !user.statusType.equalsIgnoreCase(statusType)) continue;
 
             filteredUsers.add(user);
         }
