@@ -1,41 +1,32 @@
 package com.example.housemateapp;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.location.Location;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentContainerView;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
+import com.example.housemateapp.entities.User;
 import com.example.housemateapp.utilities.ArrayListUtils;
 import com.example.housemateapp.utilities.AuthUtils;
 import com.example.housemateapp.utilities.CameraUtils;
-import com.example.housemateapp.utilities.UserAdapter;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,8 +34,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-
-import com.example.housemateapp.entities.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +59,9 @@ public class MainPageActivity extends AppCompatActivity {
 
     private UsersListFragment usersListFragment;
     private MapsFragment mapsFragment;
+
+    private LocationService locationService;
+    private Location currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +103,6 @@ public class MainPageActivity extends AppCompatActivity {
         usersListFragment = new UsersListFragment(users);
         mapsFragment = new MapsFragment(this, users);
 
-        Intent locationServiceIntent = new Intent(this, LocationService.class);
-        startService(locationServiceIntent);
-
         layout_filterSettings = findViewById(R.id.layoutFilterSettings);
 
         ActivityResultLauncher<Intent> getFilterSettingsActivityResultLauncher = this.registerForActivityResult(
@@ -133,6 +122,7 @@ public class MainPageActivity extends AppCompatActivity {
                 ArrayListUtils.sortUsersBy(filteredUsers, filterSortBy);
 
                 usersListFragment.notifyUserAdapter(filteredUsers);
+                mapsFragment.setUsers(filteredUsers);
             });
 
         layout_filterSettings.setOnClickListener(view -> {
@@ -147,14 +137,6 @@ public class MainPageActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.message_filter_not_active, Toast.LENGTH_SHORT).show();
             }
-        });
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        SettingsClient client = LocationServices.getSettingsClient(this);
-        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-
-        task.addOnSuccessListener(locationSettingsResponse -> {
-
         });
 
         image_menuButton = findViewById(R.id.imageMenuButton);
@@ -196,7 +178,19 @@ public class MainPageActivity extends AppCompatActivity {
                         statusType = statusTypeObject.toString();
                     }
 
-                    User user = new User(fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays, statusType);
+                    double latitude = 0f;
+                    Object latitudeObject = userMap.get(User.LATITUDE);
+                    if (latitudeObject != null) {
+                        latitude = Double.parseDouble(latitudeObject.toString());
+                    }
+
+                    double longitude = 0f;
+                    Object longitudeObject = userMap.get(User.LONGITUDE);
+                    if (longitudeObject != null) {
+                        longitude = Double.parseDouble(longitudeObject.toString());
+                    }
+
+                    User user = new User(fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays, statusType, latitude, longitude);
                     user.uid = uid;
                     users.add(user);
                     usersListFragment.notifyUserAdapter(users.indexOf(user));
@@ -222,8 +216,6 @@ public class MainPageActivity extends AppCompatActivity {
             filterSelectedDays = data.getIntExtra(User.WILL_STAY_FOR_DAYS, 0);
             filterSelectedStatusType = data.getStringExtra(User.STATUS_TYPE);
             filterSortBy = data.getStringExtra("sortType");
-
-//            updateRecyclerView();
         }
     }
 

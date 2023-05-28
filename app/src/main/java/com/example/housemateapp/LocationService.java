@@ -5,14 +5,26 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.example.housemateapp.entities.User;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,8 +34,15 @@ import java.util.Locale;
 import java.util.Map;
 
 public class LocationService extends Service {
-    private LocationManager locationManager;
-    private LocationListener locationListener;
+    private static final long INTERVAL_MILLIS = 5 * 1000;
+
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
+
+    private Location currentLocation;
+
+    public OnLocationChangeListener onLocationChangeListener;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -38,47 +57,61 @@ public class LocationService extends Service {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationListener = location -> {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-            if (firebaseUser == null) {
-                return;
+        LocationRequest.Builder builder = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, INTERVAL_MILLIS);
+        locationRequest = builder.build();
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                for (Location location : locationResult.getLocations()) {
+                    if (location == null) continue;
+
+                    onLocationChangeListener.act(location);
+
+                    currentLocation = location;
+                    Toast.makeText(LocationService.this, "New location received: " + location.getLatitude() + " " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+                }
             }
-
-            String uid = firebaseUser.getUid();
-
-            Map<String, Object> locationMap = new HashMap<>();
-            locationMap.put(User.LATITUDE, location.getLatitude());
-            locationMap.put(User.LONGITUDE, location.getLongitude());
-
-            db.collection(User.COLLECTION_NAME)
-                .document(uid)
-                .update(locationMap)
-                .addOnFailureListener(e -> Log.e("LocationService", "Error while updation location data", e))
-                .addOnSuccessListener(unused -> {
-                    Log.i("LocationService", String.format(Locale.GERMAN, "Successfully updated. Lat: %f, Lon: %f", latitude, longitude));
-                });
         };
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        long minTime = 1 * 1000; // a minute
-        float minDistance = 10;
+    public void onDestroy() {
+        super.onDestroy();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, locationListener);
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
         }
 
-        return START_STICKY;
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return new LocationServiceBinder();
+    }
+
+    public class LocationServiceBinder extends Binder {
+        public LocationService getService() {
+            return LocationService.this;
+        }
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public interface OnLocationChangeListener {
+        void act(Location location);
     }
 }

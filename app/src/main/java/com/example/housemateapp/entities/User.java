@@ -37,6 +37,8 @@ public class User {
     public double rangeInKilometers;
     public int willStayForDays;
     public String statusType;
+    public double latitude;
+    public double longitude;
 
     @Nullable
     public Bitmap profilePicture;
@@ -51,6 +53,13 @@ public class User {
         this.willStayForDays = willStayForDays;
 
         this.statusType = TextUtils.isEmpty(statusType) ? "Aramıyor" : statusType;
+    }
+
+    public User(String fullName, String emailAddress, String phoneNumber, String department, int grade, double rangeInKilometers, int willStayForDays, String statusType, double latitude, double longitude) {
+        this(fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays, statusType);
+
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public static void validateEmail(String emailAddress) throws ValidationException {
