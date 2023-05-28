@@ -109,7 +109,7 @@ public class MainPageActivity extends AppCompatActivity {
         }
 
         usersListFragment = new UsersListFragment(users);
-        mapsFragment = new MapsFragment();
+        mapsFragment = new MapsFragment(this, users);
 
         Intent locationServiceIntent = new Intent(this, LocationService.class);
         startService(locationServiceIntent);
