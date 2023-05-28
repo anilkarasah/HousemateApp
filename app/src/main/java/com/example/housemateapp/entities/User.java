@@ -24,6 +24,8 @@ public class User {
     public static final String RANGE_IN_KILOMETERS = "rangeInKilometers";
     public static final String WILL_STAY_FOR_DAYS = "willStayForDays";
     public static final String STATUS_TYPE = "statusType";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
 
     @Nullable
     public String uid;

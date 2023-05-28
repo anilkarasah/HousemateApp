@@ -25,6 +25,12 @@ import com.example.housemateapp.utilities.ArrayListUtils;
 import com.example.housemateapp.utilities.AuthUtils;
 import com.example.housemateapp.utilities.CameraUtils;
 import com.example.housemateapp.utilities.UserAdapter;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -75,6 +81,9 @@ public class MainPageActivity extends AppCompatActivity {
             firebaseUser.sendEmailVerification();
         }
 
+        Intent locationServiceIntent = new Intent(this, LocationService.class);
+        startService(locationServiceIntent);
+
         view_users = findViewById(R.id.mainPageUsersView);
         UserAdapter userAdapter = new UserAdapter(users, this, user -> {
             Intent userPageIntent = new Intent(MainPageActivity.this, UserPageActivity.class);
@@ -107,6 +116,14 @@ public class MainPageActivity extends AppCompatActivity {
                 userAdapter.setUsers(filteredUsers);
                 userAdapter.notifyDataSetChanged();
             });
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(locationSettingsResponse -> {
+
+        });
 
         layout_filterSettings.setOnClickListener(view -> {
             Intent filterIntent = new Intent(MainPageActivity.this, UserFilterActivity.class);

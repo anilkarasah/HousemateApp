@@ -54,6 +54,7 @@
     <string name="title_section_profile_information">Bilgileriniz</string>
     <string name="title_section_email_address">Email Adresiniz</string>
     <string name="title_section_password">Parolanız</string>
+    <string name="title_map_page">Harita Görünümü</string>
 
     <string name="message_permission_camera_required">Bu işlem için kamera izni gereklidir.</string>
     <string name="message_permission_gallery_required">Bu işlem için galeriye erişim izni gereklidir.</string>
@@ -89,4 +90,5 @@
         <item>Konaklama Süresi (Artan)</item>
         <item>Konaklama Süresi (Azalan)</item>
     </string-array>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
