@@ -110,8 +110,6 @@ public class User {
         User user = new User(fullName, emailAddress, phoneNumber, department, grade, rangeInKilometers, willStayForDays, statusType, latitude, longitude);
         user.uid = uid;
 
-        Log.i("User", "parseDocumentSnapshot: " + user);
-
         return user;
     }
 

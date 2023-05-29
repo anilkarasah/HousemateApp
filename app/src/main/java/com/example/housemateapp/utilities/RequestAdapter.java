@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.housemateapp.R;
 import com.example.housemateapp.entities.MatchingRequest;
 import com.example.housemateapp.entities.RequestType;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -159,7 +160,10 @@ public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 String opposingUserFullName;
                 String opposingUserId;
-                if (matchingRequest.fromUid.equals(matchingRequest.id)) {
+
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                String currentUserId = mAuth.getCurrentUser().getUid();
+                if (matchingRequest.fromUid.equals(currentUserId)) {
                     opposingUserFullName = matchingRequest.toUser.fullName;
                     opposingUserId = matchingRequest.toUid;
                 } else {

@@ -51,8 +51,12 @@ public class MatchingRequest {
         assert requestMap != null;
         String fromUid = requestMap.get(MatchingRequest.FROM_UID).toString();
         String toUid = requestMap.get(MatchingRequest.TO_UID).toString();
-        Integer isAcceptedObject = Integer.getInteger(requestMap.get(MatchingRequest.IS_ACCEPTED).toString());
-        boolean isAccepted = isAcceptedObject != null && isAcceptedObject != 0;
+
+        boolean isAccepted = false;
+        Object isAcceptedObject = requestMap.get(MatchingRequest.IS_ACCEPTED);
+        if (isAcceptedObject != null) {
+            isAccepted = Integer.parseInt(isAcceptedObject.toString()) != 0;
+        }
 
         return new MatchingRequest(fromUid, toUid, isAccepted, uid);
     }

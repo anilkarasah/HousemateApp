@@ -60,7 +60,6 @@ public class RequestsPageActivity extends AppCompatActivity {
                 for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                     MatchingRequest matchingRequest = MatchingRequest.parseDocumentSnapshot(snapshot, currentUid);
                     matchingRequest.id = snapshot.getId();
-                    Log.i("RequestsPageActivity", "onCreate: " + snapshot.getId());
 
                     if (!currentUid.equals(matchingRequest.fromUid) && !currentUid.equals(matchingRequest.toUid))
                         continue;
@@ -78,8 +77,6 @@ public class RequestsPageActivity extends AppCompatActivity {
                                 .addOnFailureListener(e -> Log.e("MatchingRequest", "parseDocumentSnapshot: GetUser ToId " + matchingRequest.toUid, e))
                                 .addOnSuccessListener(toUserSnapshot -> {
                                     matchingRequest.toUser = User.parseDocumentSnapshot(toUserSnapshot);
-
-                                    Log.i("MatchingRequest", "onCreate: MatchingRequest: " + matchingRequest);
 
                                     matchingRequests.add(matchingRequest);
                                     requestAdapter.notifyDataSetChanged();
