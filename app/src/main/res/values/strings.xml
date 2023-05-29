@@ -38,7 +38,8 @@
     <string name="button_send_message">Mesaj Gönder</string>
     <string name="button_text_with_whatsapp">Whatsapp ile Ulaş</string>
     <string name="button_apply_filter">Uygula</string>
-    <string name="button_accept_match_request">Eşleşmeyi Kabul Et</string>
+    <string name="button_accept_match_request">Kabul Et</string>
+    <string name="button_deny_match_request">Reddet</string>
 
     <string name="description_profile_picture">Profil Fotoğrafı</string>
     <string name="description_menu">Menü</string>
@@ -75,6 +76,7 @@
     <string name="message_filter_not_active">Filtreleme işlemi şuan desteklenmiyor.</string>
     <string name="message_only_users_looking_for_send_request">Sadece "kalacak ev/oda arayan kullanıcılar" ile "ev/oda arkadaşı arayan kullanıcılar" birbirine eşleşme isteği gönderebilir. Profilden durumunuzu değiştirebilirsiniz.</string>
     <string name="message_sent_request">İstek gönderildi.</string>
+    <string name="message_whatsapp_not_installed">Bu işlem için Whatsapp yüklü olmalıdır.</string>
 
     <string name="display_grade">%1$d. Sınıf</string>
     <string name="display_range_in_kilometers">%1$.1f km</string>

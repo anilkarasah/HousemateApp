@@ -89,7 +89,7 @@ public class UserPageActivity extends AppCompatActivity {
             .document(toUid)
             .get()
             .addOnFailureListener(e -> {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("UserPageActivity", "Get user information", e);
                 Intent mainPageIntent = new Intent(this, MainPageActivity.class);
                 startActivity(mainPageIntent);
             })
@@ -130,7 +130,7 @@ public class UserPageActivity extends AppCompatActivity {
             });
 
         button_sendMatchRequest.setOnClickListener(view -> {
-            MatchingRequest matchingRequest = new MatchingRequest(fromUid, toUid, false, mAuth.getCurrentUser().getUid());
+            MatchingRequest matchingRequest = new MatchingRequest(fromUid, toUid, 0, mAuth.getCurrentUser().getUid());
 
             db.collection(MatchingRequest.COLLECTION_NAME)
                 .add(matchingRequest)

@@ -24,11 +24,11 @@ public class MatchingRequest {
     public User toUser;
 
     public boolean fromCurrentUser;
-    public boolean isAccepted;
+    public int isAccepted;
 
     public RequestType requestType;
 
-    public MatchingRequest(String fromUid, String toUid, boolean isAccepted, String uid) {
+    public MatchingRequest(String fromUid, String toUid, int isAccepted, String uid) {
         this.id = uid;
         this.fromUid = fromUid;
         this.toUid = toUid;
@@ -36,7 +36,7 @@ public class MatchingRequest {
 
         this.fromCurrentUser = fromUid.equals(uid);
 
-        if (isAccepted) {
+        if (isAccepted != 0) {
             this.requestType = RequestType.Complete;
         } else {
             this.requestType = this.fromCurrentUser
@@ -52,10 +52,10 @@ public class MatchingRequest {
         String fromUid = requestMap.get(MatchingRequest.FROM_UID).toString();
         String toUid = requestMap.get(MatchingRequest.TO_UID).toString();
 
-        boolean isAccepted = false;
+        int isAccepted = 0;
         Object isAcceptedObject = requestMap.get(MatchingRequest.IS_ACCEPTED);
         if (isAcceptedObject != null) {
-            isAccepted = Integer.parseInt(isAcceptedObject.toString()) != 0;
+            isAccepted = Integer.parseInt(isAcceptedObject.toString());
         }
 
         return new MatchingRequest(fromUid, toUid, isAccepted, uid);

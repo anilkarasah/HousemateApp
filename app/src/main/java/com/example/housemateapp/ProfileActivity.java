@@ -128,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
                 text_department.setText(user.department);
                 text_grade.setText(String.format(Locale.GERMAN, "%d", user.grade));
 
-                text_rangeInKilometers.setText(String.format(Locale.GERMAN, "%.2f", user.rangeInKilometers));
+                text_rangeInKilometers.setText(String.format(Locale.US, "%.2f", user.rangeInKilometers));
                 text_willStayForDays.setText(String.format(Locale.GERMAN, "%d", user.willStayForDays));
 
                 int i = 0;

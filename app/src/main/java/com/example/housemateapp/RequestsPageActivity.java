@@ -3,6 +3,8 @@ package com.example.housemateapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class RequestsPageActivity extends AppCompatActivity {
+    ImageView image_menuButton;
+
     RecyclerView view_requests;
     RequestAdapter requestAdapter;
 
@@ -34,15 +38,34 @@ public class RequestsPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requests_page);
 
+        image_menuButton = findViewById(R.id.imageMenuButton);
+        image_menuButton.setVisibility(View.VISIBLE);
+        image_menuButton.setOnClickListener(view -> {
+            Intent menuIntent = new Intent(this, MenuActivity.class);
+            startActivity(menuIntent);
+        });
+
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         AuthUtils.redirectToLoginIfNotAuthenticated(this, mAuth);
 
         view_requests = findViewById(R.id.requestsList);
-        requestAdapter = new RequestAdapter(matchingRequests, this, targetRequestId -> {
+        requestAdapter = new RequestAdapter(matchingRequests, this, request -> {
             Intent requestIntent = new Intent(this, RequestActivity.class);
-            requestIntent.putExtra(MatchingRequest.ID, targetRequestId);
+            requestIntent.putExtra(MatchingRequest.ID, request.id);
+
+            String emailAddress, phoneNumber;
+            if (request.fromCurrentUser) {
+                emailAddress = request.toUser.emailAddress;
+                phoneNumber = request.toUser.phoneNumber;
+            } else {
+                emailAddress = request.fromUser.emailAddress;
+                phoneNumber = request.fromUser.phoneNumber;
+            }
+
+            requestIntent.putExtra(User.EMAIL_ADDRESS, emailAddress);
+            requestIntent.putExtra(User.PHONE_NUMBER, phoneNumber);
             startActivity(requestIntent);
         });
 

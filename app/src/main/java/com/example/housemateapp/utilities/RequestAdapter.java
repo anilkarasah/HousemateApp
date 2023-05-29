@@ -135,7 +135,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 waitingRequestViewHolder.text_statusType.setText(matchingRequest.fromUser.statusType);
 
-                waitingRequestViewHolder.layout_requestHolder.setOnClickListener(view -> callback.onItemClick(matchingRequest.id));
+                waitingRequestViewHolder.layout_requestHolder.setOnClickListener(view -> callback.onItemClick(matchingRequest));
                 break;
             case Sent:
                 SentRequestViewHolder sentRequestViewHolder = (SentRequestViewHolder) holder;
@@ -153,7 +153,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 sentRequestViewHolder.text_statusType.setText(matchingRequest.toUser.statusType);
 
-                sentRequestViewHolder.layout_requestHolder.setOnClickListener(view -> callback.onItemClick(matchingRequest.id));
+                sentRequestViewHolder.layout_requestHolder.setOnClickListener(view -> callback.onItemClick(matchingRequest));
                 break;
             case Complete:
                 CompleteRequestViewHolder completeRequestViewHolder = (CompleteRequestViewHolder) holder;
@@ -173,7 +173,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 completeRequestViewHolder.text_fullName.setText(opposingUserFullName);
 
-                completeRequestViewHolder.layout_requestHolder.setOnClickListener(view -> callback.onItemClick(matchingRequest.id));
+                completeRequestViewHolder.layout_requestHolder.setOnClickListener(view -> callback.onItemClick(matchingRequest));
                 break;
         }
     }
@@ -184,6 +184,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface OnClickCallback {
-        void onItemClick(@NonNull String targetRequestId);
+        void onItemClick(@NonNull MatchingRequest request);
     }
 }
