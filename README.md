@@ -6,4 +6,4 @@ Mehmet Anıl Karaşah
 Ödevin APK dosyasına, [Releases](https://github.com/anilkarasah/HousemateApp/releases) kısmından ulaşabilirsiniz.
 
 ## Youtube Tanıtım Videosu
-[Buraya tıklayarak](link ekle) Youtube videosunu izleyebilirsiniz.
+[Buraya tıklayarak](https://youtu.be/V5xLkXJGjCw) Youtube videosunu izleyebilirsiniz.
