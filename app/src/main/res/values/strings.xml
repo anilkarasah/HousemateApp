@@ -74,6 +74,7 @@
     <string name="message_login_again">Lütfen tekrar giriş yapınız.</string>
     <string name="message_filter_not_active">Filtreleme işlemi şuan desteklenmiyor.</string>
     <string name="message_only_users_looking_for_send_request">Sadece "kalacak ev/oda arayan kullanıcılar" ile "ev/oda arkadaşı arayan kullanıcılar" birbirine eşleşme isteği gönderebilir. Profilden durumunuzu değiştirebilirsiniz.</string>
+    <string name="message_sent_request">İstek gönderildi.</string>
 
     <string name="display_grade">%1$d. Sınıf</string>
     <string name="display_range_in_kilometers">%1$.1f km</string>

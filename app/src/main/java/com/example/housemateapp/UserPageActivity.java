@@ -136,7 +136,7 @@ public class UserPageActivity extends AppCompatActivity {
                 .add(matchingRequest)
                 .addOnFailureListener(e -> Log.e("UserPageActivity", "onCreate: Could not create Matching Request object", e))
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(this, "İstek gönderildi.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.message_sent_request, Toast.LENGTH_SHORT).show();
                     Intent mainPageIntent = new Intent(this, MainPageActivity.class);
                     startActivity(mainPageIntent);
                 });

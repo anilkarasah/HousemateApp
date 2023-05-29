@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.housemateapp.LoginActivity;
+import com.example.housemateapp.R;
 import com.example.housemateapp.utilities.ValidationException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -124,17 +125,6 @@ public class User {
 
         if (domains.length != 2 || !domains[1].equalsIgnoreCase("std.yildiz.edu.tr")) {
             throw new ValidationException("Email adresi \"example@std.yildiz.edu.tr\" formatında olmalıdır.");
-        }
-    }
-
-    public static void assertAuthentication(AppCompatActivity activity) {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        if (auth.getCurrentUser() == null) {
-            Toast.makeText(activity, "Lütfen tekrar giriş yapınız.", Toast.LENGTH_SHORT).show();
-
-            Intent loginIntent = new Intent(activity, LoginActivity.class);
-            activity.startActivity(loginIntent);
         }
     }
 
