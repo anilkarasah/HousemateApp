@@ -130,7 +130,7 @@ public class UserPageActivity extends AppCompatActivity {
             });
 
         button_sendMatchRequest.setOnClickListener(view -> {
-            MatchingRequest matchingRequest = new MatchingRequest(fromUid, toUid, false, false);
+            MatchingRequest matchingRequest = new MatchingRequest(fromUid, toUid, false, mAuth.getCurrentUser().getUid());
 
             db.collection(MatchingRequest.COLLECTION_NAME)
                 .add(matchingRequest)

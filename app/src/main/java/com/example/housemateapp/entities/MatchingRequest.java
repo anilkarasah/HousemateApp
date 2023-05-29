@@ -1,6 +1,8 @@
 package com.example.housemateapp.entities;
 
-import androidx.annotation.Nullable;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -11,7 +13,6 @@ public class MatchingRequest {
     public static final String ID = "id";
     public static final String FROM_UID = "fromUid";
     public static final String TO_UID = "toUid";
-    public static final String IS_NOTIFIED = "isNotified";
     public static final String IS_ACCEPTED = "isAccepted";
 
     public String id;
@@ -22,25 +23,51 @@ public class MatchingRequest {
     public String toUid;
     public User toUser;
 
-    public boolean isNotified;
+    public boolean fromCurrentUser;
     public boolean isAccepted;
 
-    public MatchingRequest(String fromUid, String toUid, boolean isNotified, boolean isAccepted) {
+    public RequestType requestType;
+
+    public MatchingRequest(String fromUid, String toUid, boolean isAccepted, String uid) {
+        this.id = uid;
         this.fromUid = fromUid;
         this.toUid = toUid;
-        this.isNotified = isNotified;
         this.isAccepted = isAccepted;
+
+        this.fromCurrentUser = fromUid.equals(uid);
+
+        if (isAccepted) {
+            this.requestType = RequestType.Complete;
+        } else {
+            this.requestType = this.fromCurrentUser
+                ? RequestType.Sent
+                : RequestType.Waiting;
+        }
     }
 
-    public static MatchingRequest parseDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+    public static MatchingRequest parseDocumentSnapshot(DocumentSnapshot documentSnapshot, String uid) {
         Map<String, Object> requestMap = documentSnapshot.getData();
 
         assert requestMap != null;
         String fromUid = requestMap.get(MatchingRequest.FROM_UID).toString();
         String toUid = requestMap.get(MatchingRequest.TO_UID).toString();
-        boolean isNotified = Boolean.getBoolean(requestMap.get(MatchingRequest.IS_NOTIFIED).toString());
-        boolean isAccepted = Boolean.getBoolean(requestMap.get(MatchingRequest.IS_ACCEPTED).toString());
+        Integer isAcceptedObject = Integer.getInteger(requestMap.get(MatchingRequest.IS_ACCEPTED).toString());
+        boolean isAccepted = isAcceptedObject != null && isAcceptedObject != 0;
 
-        return new MatchingRequest(fromUid, toUid, isNotified, isAccepted);
+        return new MatchingRequest(fromUid, toUid, isAccepted, uid);
+    }
+
+    @Override
+    public String toString() {
+        return "MatchingRequest{" +
+            "id='" + id + '\'' +
+            ", fromUid='" + fromUid + '\'' +
+            ",\nfromUser=" + fromUser +
+            ", toUid='" + toUid + '\'' +
+            ",\ntoUser=" + toUser +
+            ", fromCurrentUser=" + fromCurrentUser +
+            ", isAccepted=" + isAccepted +
+            ", requestType=" + requestType +
+            '}';
     }
 }

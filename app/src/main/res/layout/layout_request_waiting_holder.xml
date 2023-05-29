@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/requestCard"
+    android:id="@+id/requestCardWaiting"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
@@ -18,18 +18,18 @@
         android:layout_height="wrap_content"
         android:gravity="center">
 
-        <TextView
-            android:id="@+id/textRequestHolderType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="12dp"
-            android:padding="12dp"
-            android:text="@string/prompt_request_waiting"
-            android:textColor="@color/text"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:drawableStartCompat="@drawable/ic_clock_black" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="12dp"
+        android:padding="12dp"
+        android:text="@string/prompt_request_waiting"
+        android:textColor="@color/text"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_clock_black" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,17 +37,17 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textRequestHolderFullName"
+            android:id="@+id/textRequestHolderFullNameWaiting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:padding="8dp"
-            android:textColor="@color/accent"
+            android:textColor="@color/text"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textRequestHolderStatusType"
+            android:id="@+id/textRequestHolderStatusTypeWaiting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="8dp"
@@ -61,7 +61,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textUserHolderGrade"
+                android:id="@+id/textRequestGradeWaiting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -78,7 +78,7 @@
                 android:background="?android:attr/listDivider" />
 
             <TextView
-                android:id="@+id/textUserHolderRangeInKilometers"
+                android:id="@+id/textRequestRangeInKilometersWaiting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -95,7 +95,7 @@
                 android:background="?android:attr/listDivider" />
 
             <TextView
-                android:id="@+id/textUserHolderWillStayForDays"
+                android:id="@+id/textRequestWillStayForDaysWaiting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

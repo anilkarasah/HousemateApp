@@ -1,12 +1,10 @@
 package com.example.housemateapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +18,8 @@ import com.example.housemateapp.entities.User;
 import com.example.housemateapp.utilities.AuthUtils;
 import com.example.housemateapp.utilities.CameraUtils;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-
-import java.util.Map;
 
 public class RequestActivity extends AppCompatActivity {
     ImageView image_menuButton;
@@ -42,7 +37,7 @@ public class RequestActivity extends AppCompatActivity {
     Button button_message;
     Button button_email;
 
-    String requestId;
+    String targetRequestId;
 
     private MatchingRequest matchingRequest;
 
@@ -58,7 +53,8 @@ public class RequestActivity extends AppCompatActivity {
         AuthUtils.redirectToLoginIfNotAuthenticated(this, mAuth);
 
         Bundle bundle = getIntent().getExtras();
-        requestId = bundle.getString(MatchingRequest.ID);
+        targetRequestId = bundle.getString(MatchingRequest.ID);
+        Log.i("RequestActivity", "onCreate: " + targetRequestId);
 
         image_menuButton = findViewById(R.id.imageMenuButton);
         image_menuButton.setVisibility(View.VISIBLE);
@@ -80,33 +76,18 @@ public class RequestActivity extends AppCompatActivity {
         button_email = findViewById(R.id.buttonRequestEmail);
 
         db.collection(MatchingRequest.COLLECTION_NAME)
-            .document(requestId)
+            .document(targetRequestId)
             .get()
-            .addOnFailureListener(e -> Log.e("RequestActivity", "MatchingRequestId: " + requestId, e))
+            .addOnFailureListener(e -> Log.e("RequestActivity", "MatchingRequestId: " + targetRequestId, e))
             .addOnSuccessListener(matchingRequestDocumentSnapshot -> {
-                Map<String, Object> map = matchingRequestDocumentSnapshot.getData();
+                matchingRequest = MatchingRequest.parseDocumentSnapshot(matchingRequestDocumentSnapshot, mAuth.getCurrentUser().getUid());
 
-                assert map != null;
-                String fromUid = map.get(MatchingRequest.FROM_UID).toString();
-                String toUid = map.get(MatchingRequest.TO_UID).toString();
-                boolean isNotified = Boolean.getBoolean(map.get(MatchingRequest.IS_NOTIFIED).toString());
-                boolean isAccepted = Boolean.getBoolean(map.get(MatchingRequest.IS_ACCEPTED).toString());
-
-                matchingRequest = new MatchingRequest(fromUid, toUid, isNotified, isAccepted);
-
-                storage.getReference()
-                    .child(CameraUtils.getStorageChild(fromUid))
-                    .getBytes(CameraUtils.TWO_MEGABYTES)
-                    .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show())
-                    .addOnSuccessListener(bytes -> {
-                        Bitmap bitmap = CameraUtils.getBitmap(bytes);
-                        image_profilePicture.setImageBitmap(bitmap);
-                    });
-
+                String userId = matchingRequest.fromCurrentUser ?
+                    matchingRequest.toUid : matchingRequest.fromUid;
                 db.collection(User.COLLECTION_NAME)
-                    .document(fromUid)
+                    .document(userId)
                     .get()
-                    .addOnFailureListener(e -> Log.e("RequestActivity", "UserId: " + fromUid, e))
+                    .addOnFailureListener(e -> Log.e("RequestActivity", "UserId: " + userId, e))
                     .addOnSuccessListener(fromUserDocumentSnapshot -> {
                         User user = User.parseDocumentSnapshot(fromUserDocumentSnapshot);
 
@@ -125,6 +106,15 @@ public class RequestActivity extends AppCompatActivity {
 
                         String willStayForDaysString = resources.getString(R.string.display_will_stay_for_days, user.willStayForDays);
                         text_willStayForDays.setText(willStayForDaysString);
+                    });
+                
+                storage.getReference()
+                    .child(CameraUtils.getStorageChild(userId))
+                    .getBytes(CameraUtils.TWO_MEGABYTES)
+                    .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show())
+                    .addOnSuccessListener(bytes -> {
+                        Bitmap bitmap = CameraUtils.getBitmap(bytes);
+                        image_profilePicture.setImageBitmap(bitmap);
                     });
             });
     }

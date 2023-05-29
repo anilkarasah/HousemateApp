@@ -3,6 +3,7 @@ package com.example.housemateapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -39,9 +40,9 @@ public class RequestsPageActivity extends AppCompatActivity {
         AuthUtils.redirectToLoginIfNotAuthenticated(this, mAuth);
 
         view_requests = findViewById(R.id.requestsList);
-        requestAdapter = new RequestAdapter(matchingRequests, this, request -> {
+        requestAdapter = new RequestAdapter(matchingRequests, this, targetRequestId -> {
             Intent requestIntent = new Intent(this, RequestActivity.class);
-            requestIntent.putExtra(MatchingRequest.FROM_UID, request.fromUid);
+            requestIntent.putExtra(MatchingRequest.ID, targetRequestId);
             startActivity(requestIntent);
         });
 
@@ -57,25 +58,34 @@ public class RequestsPageActivity extends AppCompatActivity {
             .addOnFailureListener(e -> Log.e("RequestsPageActivity", "onCreate: GetMatchingRequests", e))
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
-                    MatchingRequest matchingRequest = MatchingRequest.parseDocumentSnapshot(snapshot);
+                    MatchingRequest matchingRequest = MatchingRequest.parseDocumentSnapshot(snapshot, currentUid);
+                    matchingRequest.id = snapshot.getId();
+                    Log.i("RequestsPageActivity", "onCreate: " + snapshot.getId());
 
                     if (!currentUid.equals(matchingRequest.fromUid) && !currentUid.equals(matchingRequest.toUid))
                         continue;
 
-                    matchingRequests.add(matchingRequest);
-                    requestAdapter.notifyItemChanged(matchingRequests.indexOf(matchingRequest));
-
                     db.collection(User.COLLECTION_NAME)
                         .document(matchingRequest.fromUid)
                         .get()
-                        .addOnFailureListener(e -> Log.e("RequestsPageActivity", "onCreate: GetUser FromId " + matchingRequest.fromUid, e))
-                        .addOnSuccessListener(documentSnapshot -> {
-                            matchingRequest.fromUser = User.parseDocumentSnapshot(documentSnapshot);
-                            requestAdapter.notifyItemChanged(matchingRequests.indexOf(matchingRequest));
+                        .addOnFailureListener(e -> Log.e("MatchingRequest", "parseDocumentSnapshot: GetUser FromId " + matchingRequest.fromUid, e))
+                        .addOnSuccessListener(fromUserSnapshot -> {
+                            matchingRequest.fromUser = User.parseDocumentSnapshot(fromUserSnapshot);
+
+                            db.collection(User.COLLECTION_NAME)
+                                .document(matchingRequest.toUid)
+                                .get()
+                                .addOnFailureListener(e -> Log.e("MatchingRequest", "parseDocumentSnapshot: GetUser ToId " + matchingRequest.toUid, e))
+                                .addOnSuccessListener(toUserSnapshot -> {
+                                    matchingRequest.toUser = User.parseDocumentSnapshot(toUserSnapshot);
+
+                                    Log.i("MatchingRequest", "onCreate: MatchingRequest: " + matchingRequest);
+
+                                    matchingRequests.add(matchingRequest);
+                                    requestAdapter.notifyDataSetChanged();
+                                });
                         });
                 }
-
-                requestAdapter.notifyDataSetChanged();
             });
     }
 }
