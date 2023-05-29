@@ -23,6 +23,7 @@ import com.example.housemateapp.entities.User;
 import com.example.housemateapp.utilities.ArrayListUtils;
 import com.example.housemateapp.utilities.AuthUtils;
 import com.example.housemateapp.utilities.CameraUtils;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
@@ -87,8 +88,7 @@ public class MainPageActivity extends AppCompatActivity {
         assert firebaseUser != null;
 
         if (!firebaseUser.isEmailVerified()) {
-            Toast.makeText(this, R.string.message_verify_email_address, Toast.LENGTH_SHORT).show();
-            firebaseUser.sendEmailVerification();
+            showEmailVerificationMessage(firebaseUser);
         }
 
         usersListFragment = new UsersListFragment(users);
@@ -169,6 +169,13 @@ public class MainPageActivity extends AppCompatActivity {
             filterSelectedStatusType = data.getStringExtra(User.STATUS_TYPE);
             filterSortBy = data.getStringExtra("sortType");
         }
+    }
+
+    private void showEmailVerificationMessage(FirebaseUser firebaseUser) {
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.message_verify_email_address, Snackbar.LENGTH_LONG);
+        snackbar.setAction("Doğrula", view -> firebaseUser.sendEmailVerification());
+        snackbar.setDuration(10 * 1000); // 10 seconds
+        snackbar.show();
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
